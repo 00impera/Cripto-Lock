@@ -221,6 +221,26 @@
             content: "🔒";
             margin-right: 8px;
         }
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #22243a;
+            padding: 30px;
+            border-radius: 15px;
+            min-width: 300px;
+            max-width: 90vw;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .modal .btn { margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -312,6 +332,50 @@
             <div style="margin-top: 30px;">
                 <button class="btn btn-secondary" onclick="exportVault()">Export Backup</button>
                 <button class="btn btn-danger" onclick="lockVault()">Lock Vault</button>
+            </div>
+        </div>
+
+        <!-- PIN Setup Modal -->
+        <div id="pinSetupModal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Change PIN</h2>
+                <div id="currentPinGroup">
+                    <label for="currentPin">Current PIN</label>
+                    <input type="password" id="currentPin" maxlength="8">
+                </div>
+                <label for="newPin">New PIN</label>
+                <input type="password" id="newPin" maxlength="8">
+                <label for="confirmPin">Confirm New PIN</label>
+                <input type="password" id="confirmPin" maxlength="8">
+                <div id="pinMessage"></div>
+                <button id="pinChangeBtn" class="btn btn-primary" onclick="changePinCode()">Change PIN</button>
+                <button class="btn btn-secondary" onclick="hidePinSetup()">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Name Setup Modal -->
+        <div id="nameSetupModal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Set Vault Owner Name</h2>
+                <label for="ownerNameInput">Name/Tag</label>
+                <input type="text" id="ownerNameInput" maxlength="30">
+                <div id="nameMessage"></div>
+                <button class="btn btn-primary" onclick="setOwnerName()">Set Name</button>
+                <button class="btn btn-secondary" onclick="hideNameSetup()">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Instructions Modal -->
+        <div id="instructionsModal" class="modal hidden">
+            <div class="modal-content">
+                <h2>How to Use Crypto Vault</h2>
+                <ul>
+                    <li>Set a strong PIN and owner name for your vault.</li>
+                    <li>Add your cryptocurrency wallets; private keys are encoded for demonstration but not securely encrypted.</li>
+                    <li>Unlock your vault with your PIN to access wallets.</li>
+                    <li>Use export to backup your wallets. Your data is stored locally and will be lost if you clear your browser's session data.</li>
+                </ul>
+                <button class="btn btn-secondary" onclick="hideInstructions()">Close</button>
             </div>
         </div>
     </div>

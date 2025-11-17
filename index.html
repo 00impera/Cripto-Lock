@@ -8,130 +8,37 @@
     <script>emailjs.init("T_-SjRTHAsYr0PkpI");</script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Segoe UI', system-ui; 
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 50%, #7303c0 100%);
-            color: #fff; 
-            min-height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            padding: 20px;
-        }
-        .container { 
-            background: rgba(255,255,255,0.15); 
-            backdrop-filter: blur(20px); 
-            border-radius: 25px; 
-            padding: 35px; 
-            max-width: 480px; 
-            width: 100%; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 100px rgba(117,3,192,0.3);
-            border: 2px solid rgba(255,255,255,0.2);
-        }
+        body { font-family: 'Segoe UI', system-ui; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 50%, #7303c0 100%); color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .container { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border-radius: 25px; padding: 35px; max-width: 480px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.2); }
         .logo { text-align: center; margin-bottom: 25px; }
-        .logo-img {
-            width: 80px; height: 80px;
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            margin-bottom: 15px;
-            box-shadow: 0 10px 30px rgba(255,215,0,0.4);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(255,215,0,0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 15px 40px rgba(255,215,0,0.6); }
-        }
-        h1 { 
-            font-size: 26px; margin-bottom: 8px; 
-            background: linear-gradient(45deg, #ffd700, #ff8c00, #ffd700);
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            text-align: center; font-weight: 700;
-        }
-        h2 { font-size: 24px; margin-bottom: 20px; color: #ffd700; }
+        .logo-img { width: 80px; height: 80px; background: linear-gradient(135deg, #ffd700, #ff8c00); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 48px; margin-bottom: 15px; box-shadow: 0 10px 30px rgba(255,215,0,0.4); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        h1 { font-size: 26px; margin-bottom: 8px; background: linear-gradient(45deg, #ffd700, #ff8c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; font-weight: 700; }
         .subtitle { text-align: center; color: #e0e0ff; font-size: 14px; margin-bottom: 20px; opacity: 0.9; }
-        input, select, textarea { 
-            width: 100%; padding: 14px 18px; margin: 10px 0; 
-            border: 2px solid rgba(255,255,255,0.2); 
-            border-radius: 12px; background: rgba(0,0,0,0.25); 
-            color: #fff; font-size: 15px; transition: all 0.3s;
-        }
-        input:focus, select:focus, textarea:focus { 
-            outline: none; border-color: #ffd700; 
-            background: rgba(0,0,0,0.35);
-            box-shadow: 0 0 20px rgba(255,215,0,0.3);
-        }
+        input, select, textarea { width: 100%; padding: 14px 18px; margin: 10px 0; border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; background: rgba(0,0,0,0.25); color: #fff; font-size: 15px; transition: all 0.3s; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #ffd700; background: rgba(0,0,0,0.35); box-shadow: 0 0 20px rgba(255,215,0,0.3); }
         input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.5); }
-        .btn { 
-            width: 100%; padding: 14px; margin: 10px 0; border: none; 
-            border-radius: 12px; font-weight: 700; cursor: pointer; 
-            transition: all 0.3s; font-size: 15px;
-            text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .btn-primary { 
-            background: linear-gradient(135deg, #ffd700, #ff8c00); 
-            color: #000; box-shadow: 0 5px 20px rgba(255,215,0,0.4);
-        }
+        .btn { width: 100%; padding: 14px; margin: 10px 0; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-primary { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; box-shadow: 0 5px 20px rgba(255,215,0,0.4); }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255,215,0,0.6); }
         .btn-primary:disabled { background: linear-gradient(135deg, #999, #666); cursor: not-allowed; transform: none; }
         .btn-secondary { background: rgba(255,255,255,0.15); color: #fff; border: 2px solid rgba(255,255,255,0.3); }
-        .btn-secondary:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.5); }
         .btn-danger { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; box-shadow: 0 5px 20px rgba(255,65,108,0.4); }
-        .btn-danger:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255,65,108,0.6); }
-        .hidden { display: none; }
-        .msg { padding: 12px; margin: 12px 0; border-radius: 10px; text-align: center; font-weight: 600; animation: slideIn 0.3s; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .hidden { display: none !important; }
+        .msg { padding: 12px; margin: 12px 0; border-radius: 10px; text-align: center; font-weight: 600; }
         .success { background: rgba(46,204,113,0.25); border: 2px solid #2ecc71; color: #2ecc71; }
         .error { background: rgba(231,76,60,0.25); border: 2px solid #e74c3c; color: #ff6b6b; }
-        .wallet { 
-            background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.2)); 
-            padding: 18px; margin: 12px 0; border-radius: 15px; 
-            border-left: 5px solid #ffd700; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s;
-        }
-        .wallet:hover { transform: translateX(5px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .wallet { background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.2)); padding: 18px; margin: 12px 0; border-radius: 15px; border-left: 5px solid #ffd700; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .wallet h3 { color: #ffd700; margin-bottom: 10px; font-size: 18px; }
         .wallet p { color: #e0e0ff; margin: 5px 0; font-size: 14px; }
-        .modal {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85); display: flex;
-            align-items: center; justify-content: center;
-            z-index: 1000; backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            padding: 35px; border-radius: 20px;
-            min-width: 320px; max-width: 90vw;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-        .pi-badge {
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            color: #000; padding: 8px 16px; border-radius: 20px;
-            font-size: 13px; font-weight: 700; display: inline-block;
-            margin: 10px 0; box-shadow: 0 4px 15px rgba(255,215,0,0.4);
-        }
+        .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: linear-gradient(135deg, #6a11cb, #2575fc); padding: 35px; border-radius: 20px; min-width: 320px; max-width: 90vw; box-shadow: 0 20px 60px rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.2); }
+        .pi-badge { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; display: inline-block; margin: 10px 0; }
         .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .feature-item {
-            background: rgba(0,0,0,0.2); padding: 12px;
-            border-radius: 10px; text-align: center;
-            font-size: 12px; border: 1px solid rgba(255,255,255,0.1);
-        }
+        .feature-item { background: rgba(0,0,0,0.2); padding: 12px; border-radius: 10px; text-align: center; font-size: 12px; border: 1px solid rgba(255,255,255,0.1); }
         .feature-item::before { content: "✓"; display: block; font-size: 20px; color: #ffd700; margin-bottom: 5px; }
-        .otc-card {
-            background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.2));
-            padding: 18px; margin: 12px 0; border-radius: 15px;
-            border-left: 5px solid #2575fc; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .otc-badge {
-            display: inline-block; padding: 4px 12px;
-            border-radius: 15px; font-size: 11px;
-            font-weight: 700; margin: 5px 5px 5px 0;
-        }
+        .otc-card { background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.2)); padding: 18px; margin: 12px 0; border-radius: 15px; border-left: 5px solid #2575fc; }
+        .otc-badge { display: inline-block; padding: 4px 12px; border-radius: 15px; font-size: 11px; font-weight: 700; margin: 5px 5px 5px 0; }
         .otc-buy { background: rgba(46,204,113,0.3); color: #2ecc71; border: 1px solid #2ecc71; }
         .otc-sell { background: rgba(255,193,7,0.3); color: #ffc107; border: 1px solid #ffc107; }
         .otc-total { font-size: 20px; color: #ffd700; font-weight: 700; margin: 10px 0; }
@@ -140,98 +47,62 @@
 <body>
     <div class="container">
         <div id="otpLogin">
-            <div class="logo">
-                <div class="logo-img">π</div>
-                <h1>Pi Network Vault</h1>
-                <p class="subtitle">Secure Your Crypto Assets</p>
-            </div>
+            <div class="logo"><div class="logo-img">π</div><h1>Pi Network Vault</h1><p class="subtitle">Secure Your Crypto Assets</p></div>
             <div id="step1">
                 <input type="email" id="email" placeholder="📧 Enter your email address">
                 <button class="btn btn-primary" onclick="sendCode()" id="sendBtn">🔐 Send Login Code</button>
                 <div id="msg1"></div>
                 <div class="feature-grid">
-                    <div class="feature-item">OTP Login</div>
-                    <div class="feature-item">PIN Secure</div>
-                    <div class="feature-item">Local Storage</div>
-                    <div class="feature-item">OTC Trading</div>
+                    <div class="feature-item">OTP Login</div><div class="feature-item">PIN Secure</div>
+                    <div class="feature-item">Local Storage</div><div class="feature-item">OTC Trading</div>
                 </div>
             </div>
             <div id="step2" class="hidden">
-                <input type="text" id="code" placeholder="🔑 Enter 6-digit code" maxlength="6" style="text-align:center; font-size:24px; letter-spacing:8px;">
-                <button class="btn btn-primary" onclick="verifyCode()">✅ Verify & Login</button>
+                <input type="text" id="code" placeholder="🔑 6-digit code" maxlength="6" style="text-align:center;font-size:24px;letter-spacing:8px;">
+                <button class="btn btn-primary" onclick="verifyCode()">✅ Verify</button>
                 <button class="btn btn-secondary" onclick="backToEmail()">← Back</button>
                 <div id="msg2"></div>
             </div>
         </div>
         <div id="pinScreen" class="hidden">
-            <div class="logo">
-                <div class="logo-img">🔒</div>
-                <h1>Enter Your PIN</h1>
-                <p class="subtitle">Unlock Your Vault</p>
-            </div>
-            <input type="password" id="pin" placeholder="Enter PIN" maxlength="6" style="text-align:center; font-size:28px; letter-spacing:12px;">
-            <button class="btn btn-primary" onclick="unlock()">🔓 Unlock Vault</button>
-            <button class="btn btn-secondary" onclick="setupPin()">⚙️ Set New PIN</button>
+            <div class="logo"><div class="logo-img">🔒</div><h1>Enter Your PIN</h1><p class="subtitle">Unlock Your Vault</p></div>
+            <input type="password" id="pin" placeholder="PIN" maxlength="6" style="text-align:center;font-size:28px;letter-spacing:12px;">
+            <button class="btn btn-primary" onclick="unlock()">🔓 Unlock</button>
+            <button class="btn btn-secondary" onclick="setupPin()">⚙️ Set PIN</button>
             <button class="btn btn-danger" onclick="logout()">🚪 Logout</button>
             <div id="pinMsg"></div>
         </div>
         <div id="vault" class="hidden">
-            <div class="logo">
-                <div class="logo-img">💎</div>
-                <h1>Your Crypto Vault</h1>
-                <div class="pi-badge">🥧 Pi Network Enabled</div>
-            </div>
-            <div style="display:flex; gap:10px; margin:20px 0;">
+            <div class="logo"><div class="logo-img">💎</div><h1>Your Crypto Vault</h1><div class="pi-badge">🥧 Pi Network</div></div>
+            <div style="display:flex;gap:10px;margin:20px 0;">
                 <button class="btn btn-secondary" onclick="showTab('wallets')" id="walletsTab" style="flex:1;">💼 Wallets</button>
                 <button class="btn btn-secondary" onclick="showTab('otc')" id="otcTab" style="flex:1;">🔄 OTC</button>
             </div>
             <div id="walletsSection">
                 <input type="text" id="name" placeholder="💼 Wallet Name">
-                <select id="type">
-                    <option value="Pi Network">🥧 Pi Network (PI)</option>
-                    <option value="Bitcoin">₿ Bitcoin (BTC)</option>
-                    <option value="Ethereum">Ξ Ethereum (ETH)</option>
-                    <option value="Other">📦 Other</option>
-                </select>
-                <input type="text" id="address" placeholder="📍 Wallet Address">
+                <select id="type"><option value="Pi Network">🥧 Pi Network</option><option value="Bitcoin">₿ Bitcoin</option><option value="Ethereum">Ξ Ethereum</option><option value="Other">📦 Other</option></select>
+                <input type="text" id="address" placeholder="📍 Address">
                 <textarea id="key" placeholder="🔑 Private Key" rows="3"></textarea>
-                <button class="btn btn-primary" onclick="saveWallet()">💾 Save Wallet</button>
+                <button class="btn btn-primary" onclick="saveWallet()">💾 Save</button>
                 <div id="wallets"></div>
             </div>
             <div id="otcSection" class="hidden">
-                <select id="otcType">
-                    <option value="buy">💵 Buy Crypto</option>
-                    <option value="sell">💰 Sell Crypto</option>
-                </select>
-                <select id="otcCrypto">
-                    <option value="Pi Network">🥧 Pi Network</option>
-                    <option value="Bitcoin">₿ Bitcoin</option>
-                    <option value="Ethereum">Ξ Ethereum</option>
-                    <option value="USDT">💵 USDT</option>
-                </select>
+                <select id="otcType"><option value="buy">💵 Buy</option><option value="sell">💰 Sell</option></select>
+                <select id="otcCrypto"><option value="Pi Network">🥧 Pi</option><option value="Bitcoin">₿ BTC</option><option value="Ethereum">Ξ ETH</option><option value="USDT">💵 USDT</option></select>
                 <input type="number" id="otcAmount" placeholder="💎 Amount" step="0.01">
-                <input type="number" id="otcPrice" placeholder="💵 Price per unit (USD)" step="0.01">
-                <select id="otcPayment">
-                    <option value="Bank Transfer">🏦 Bank Transfer</option>
-                    <option value="PayPal">💳 PayPal</option>
-                    <option value="Cash">💵 Cash</option>
-                    <option value="Crypto">🪙 Crypto</option>
-                </select>
-                <textarea id="otcDetails" placeholder="📝 Trade details" rows="2"></textarea>
-                <input type="text" id="otcContact" placeholder="📞 Contact (email/phone/telegram)">
-                <button class="btn btn-primary" onclick="createOTC()">📝 Create Trade</button>
+                <input type="number" id="otcPrice" placeholder="💵 Price/unit" step="0.01">
+                <select id="otcPayment"><option value="Bank Transfer">🏦 Bank</option><option value="PayPal">💳 PayPal</option><option value="Cash">💵 Cash</option><option value="Crypto">🪙 Crypto</option></select>
+                <textarea id="otcDetails" placeholder="📝 Details" rows="2"></textarea>
+                <input type="text" id="otcContact" placeholder="📞 Contact">
+                <button class="btn btn-primary" onclick="createOTC()">📝 Create</button>
                 <div id="otcList"></div>
             </div>
-            <div style="margin-top:25px;">
-                <button class="btn btn-secondary" onclick="exportData()">📤 Export</button>
-                <button class="btn btn-danger" onclick="lock()">🔒 Lock</button>
-            </div>
+            <div style="margin-top:25px;"><button class="btn btn-secondary" onclick="exportData()">📤 Export</button><button class="btn btn-danger" onclick="lock()">🔒 Lock</button></div>
         </div>
         <div id="pinModal" class="hidden modal">
-            <div class="modal-content">
-                <h1>Set Your PIN</h1>
+            <div class="modal-content"><h1>Set PIN</h1>
                 <input type="password" id="newPin" placeholder="🔐 New PIN (4-6 digits)" maxlength="6">
-                <input type="password" id="confirmPin" placeholder="🔐 Confirm PIN" maxlength="6">
+                <input type="password" id="confirmPin" placeholder="🔐 Confirm" maxlength="6">
                 <button class="btn btn-primary" onclick="setPin()">✅ Save</button>
                 <button class="btn btn-secondary" onclick="closeModal()">❌ Cancel</button>
                 <div id="modalMsg"></div>
@@ -239,145 +110,10 @@
         </div>
     </div>
     <script>
-        const SVC = "service_sddi48j", TPL = "template_nrvnos9";
-        let state = { locked: true, loggedIn: false, wallets: [], otcTrades: [], userPin: '1234' };
-        window.onload = () => {
-            const saved = sessionStorage.getItem('vault');
-            if (saved) state = JSON.parse(saved);
-            if (localStorage.getItem('loggedIn')) { state.loggedIn = true; show('pinScreen'); }
-        };
-        function show(id) {
-            ['otpLogin','pinScreen','vault','pinModal'].forEach(x => document.getElementById(x).classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-        }
-        function showTab(tab) {
-            if (tab === 'wallets') {
-                document.getElementById('walletsSection').classList.remove('hidden');
-                document.getElementById('otcSection').classList.add('hidden');
-                document.getElementById('walletsTab').style.background = 'linear-gradient(135deg, #ffd700, #ff8c00)';
-                document.getElementById('walletsTab').style.color = '#000';
-                document.getElementById('otcTab').style.background = 'rgba(255,255,255,0.15)';
-                document.getElementById('otcTab').style.color = '#fff';
-            } else {
-                document.getElementById('walletsSection').classList.add('hidden');
-                document.getElementById('otcSection').classList.remove('hidden');
-                document.getElementById('otcTab').style.background = 'linear-gradient(135deg, #ffd700, #ff8c00)';
-                document.getElementById('otcTab').style.color = '#000';
-                document.getElementById('walletsTab').style.background = 'rgba(255,255,255,0.15)';
-                document.getElementById('walletsTab').style.color = '#fff';
-                displayOTC();
-            }
-        }
-        function msg(id, text, type='success') {
-            document.getElementById(id).innerHTML = `<div class="msg ${type}">${text}</div>`;
-            setTimeout(() => document.getElementById(id).innerHTML = '', 3000);
-        }
-        function sendCode() {
-            const email = document.getElementById('email').value.trim();
-            if (!email.includes('@')) return msg('msg1','❌ Invalid email','error');
-            const code = Math.floor(100000 + Math.random()*900000).toString();
-            localStorage.setItem('otp', code);
-            localStorage.setItem('otpExp', Date.now() + 900000);
-            document.getElementById('sendBtn').disabled = true;
-            msg('msg1','📨 Sending...');
-            emailjs.send(SVC, TPL, { to_email: email, passcode: code, time: new Date(Date.now()+900000).toLocaleTimeString() })
-            .then(() => {
-                msg('msg1','✅ Code sent!');
-                document.getElementById('step1').classList.add('hidden');
-                document.getElementById('step2').classList.remove('hidden');
-            }, () => {
-                msg('msg1','❌ Failed','error');
-                document.getElementById('sendBtn').disabled = false;
-            });
-        }
-        function verifyCode() {
-            const input = document.getElementById('code').value.trim();
-            const saved = localStorage.getItem('otp');
-            const exp = parseInt(localStorage.getItem('otpExp'));
-            if (Date.now() > exp) { msg('msg2','⏰ Code expired','error'); return backToEmail(); }
-            if (input === saved) {
-                localStorage.setItem('loggedIn','true');
-                state.loggedIn = true;
-                msg('msg2','✅ Success!');
-                setTimeout(() => show('pinScreen'), 1000);
-            } else { msg('msg2','❌ Wrong code','error'); }
-        }
-        function backToEmail() {
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('step1').classList.remove('hidden');
-            document.getElementById('sendBtn').disabled = false;
-        }
-        function logout() {
-            if (confirm('🚪 Logout?')) {
-                localStorage.removeItem('loggedIn');
-                state = { locked: true, loggedIn: false, wallets: [], otcTrades: [], userPin: '1234' };
-                show('otpLogin');
-            }
-        }
-        function unlock() {
-            const pin = document.getElementById('pin').value;
-            if (pin === state.userPin) {
-                state.locked = false;
-                document.getElementById('pin').value = '';
-                show('vault');
-                showTab('wallets');
-                displayWallets();
-            } else { msg('pinMsg','❌ Wrong PIN','error'); }
-        }
-        function lock() { state.locked = true; show('pinScreen'); }
-        function setupPin() { show('pinModal'); }
-        function closeModal() { show('pinScreen'); }
-        function setPin() {
-            const newPin = document.getElementById('newPin').value;
-            const conf = document.getElementById('confirmPin').value;
-            if (newPin.length < 4) return msg('modalMsg','❌ PIN too short','error');
-            if (!/^\d+$/.test(newPin)) return msg('modalMsg','❌ Numbers only','error');
-            if (newPin !== conf) return msg('modalMsg','❌ PINs dont match','error');
-            state.userPin = newPin;
-            save();
-            msg('modalMsg','✅ PIN saved!');
-            setTimeout(() => closeModal(), 1500);
-        }
-        function saveWallet() {
-            const wallet = {
-                id: Date.now(),
-                name: document.getElementById('name').value,
-                type: document.getElementById('type').value,
-                address: document.getElementById('address').value,
-                key: btoa(document.getElementById('key').value),
-                date: new Date().toLocaleDateString()
-            };
-            if (!wallet.name || !wallet.address) return alert('❌ Fill name and address');
-            state.wallets.push(wallet);
-            save();
-            clear();
-            displayWallets();
-            alert('✅ Wallet saved!');
-        }
-        function displayWallets() {
-            const div = document.getElementById('wallets');
-            if (state.wallets.length === 0) {
-                div.innerHTML = '<p style="text-align:center;color:#e0e0ff;margin:20px 0;opacity:0.7;">📭 No wallets yet</p>';
-                return;
-            }
-            div.innerHTML = state.wallets.map(w => `
-                <div class="wallet">
-                    <h3>${w.name}</h3>
-                    <p><b>${w.type}</b></p>
-                    <p>${w.address.substring(0,30)}...</p>
-                    <p>📅 ${w.date}</p>
-                    <button class="btn btn-secondary" onclick="viewKey(${w.id})" style="width:auto;padding:10px 20px;margin:5px 5px 0 0;">🔑 View</button>
-                    <button class="btn btn-danger" onclick="delWallet(${w.id})" style="width:auto;padding:10px 20px;">🗑️</button>
-                </div>
-            `).join('');
-        }
-        function viewKey(id) {
-            const w = state.wallets.find(x => x.id === id);
-            if (w) alert(`🔑 ${w.name}:\n\n${atob(w.key)}\n\n⚠️ Keep secure!`);
-        }
-        function delWallet(id) {
-            if (confirm('🗑️ Delete?')) {
-                state.wallets = state.wallets.filter(x => x.id !== id);<!DOCTYPE html>
+        const SVC="service_sddi48j",TPL="template_nrvnos9";let state={locked:!0,loggedIn:!1,wallets:[],otcTrades:[],userPin:"1234"};function show(e){["otpLogin","pinScreen","vault","pinModal"].forEach(t=>document.getElementById(t).classList.add("hidden")),document.getElementById(e).classList.remove("hidden")}function showTab(e){"wallets"===e?(document.getElementById("walletsSection").classList.remove("hidden"),document.getElementById("otcSection").classList.add("hidden"),document.getElementById("walletsTab").style.background="linear-gradient(135deg, #ffd700, #ff8c00)",document.getElementById("walletsTab").style.color="#000",document.getElementById("otcTab").style.background="rgba(255,255,255,0.15)",document.getElementById("otcTab").style.color="#fff"):(document.getElementById("walletsSection").classList.add("hidden"),document.getElementById("otcSection").classList.remove("hidden"),document.getElementById("otcTab").style.background="linear-gradient(135deg, #ffd700, #ff8c00)",document.getElementById("otcTab").style.color="#000",document.getElementById("walletsTab").style.background="rgba(255,255,255,0.15)",document.getElementById("walletsTab").style.color="#fff",displayOTC())}function msg(e,t,n="success"){document.getElementById(e).innerHTML=`<div class="msg ${n}">${t}</div>`,setTimeout(()=>document.getElementById(e).innerHTML="",3e3)}function sendCode(){const e=document.getElementById("email").value.trim();if(!e.includes("@"))return msg("msg1","❌ Invalid email","error");const t=Math.floor(1e5+9e5*Math.random()).toString();localStorage.setItem("otp",t),localStorage.setItem("otpExp",Date.now()+9e5),document.getElementById("sendBtn").disabled=!0,msg("msg1","📨 Sending..."),emailjs.send(SVC,TPL,{to_email:e,passcode:t,time:new Date(Date.now()+9e5).toLocaleTimeString()}).then(()=>{msg("msg1","✅ Code sent!"),document.getElementById("step1").classList.add("hidden"),document.getElementById("step2").classList.remove("hidden")},()=>{msg("msg1","❌ Failed","error"),document.getElementById("sendBtn").disabled=!1})}function verifyCode(){const e=document.getElementById("code").value.trim(),t=localStorage.getItem("otp"),n=parseInt(localStorage.getItem("otpExp"));if(Date.now()>n)return msg("msg2","⏰ Code expired","error"),backToEmail();e===t?(localStorage.setItem("loggedIn","true"),state.loggedIn=!0,msg("msg2","✅ Success!"),setTimeout(()=>show("pinScreen"),1e3)):msg("msg2","❌ Wrong code","error")}function backToEmail(){document.getElementById("step2").classList.add("hidden"),document.getElementById("step1").classList.remove("hidden"),document.getElementById("sendBtn").disabled=!1}function logout(){confirm("🚪 Logout?")&&(localStorage.removeItem("loggedIn"),state={locked:!0,loggedIn:!1,wallets:[],otcTrades:[],userPin:"1234"},show("otpLogin"))}function unlock(){const e=document.getElementById("pin").value;e===state.userPin?(state.locked=!1,document.getElementById("pin").value="",show("vault"),showTab("wallets"),displayWallets()):msg("pinMsg","❌ Wrong PIN","error")}function lock(){state.locked=!0,show("pinScreen")}function setupPin(){show("pinModal")}function closeModal(){show("pinScreen")}function setPin(){const e=document.getElementById("newPin").value,t=document.getElementById("confirmPin").value;if(e.length<4)return msg("modalMsg","❌ PIN too short","error");if(!/^\d+$/.test(e))return msg("modalMsg","❌ Numbers only","error");if(e!==t)return msg("modalMsg","❌ PINs dont match","error");state.userPin=e,save(),msg("modalMsg","✅ PIN saved!"),setTimeout(()=>closeModal(),1500)}function saveWallet(){const e={id:Date.now(),name:document.getElementById("name").value,type:document.getElementById("type").value,address:document.getElementById("address").value,key:btoa(document.getElementById("key").value),date:new Date().toLocaleDateString()};if(!e.name||!e.address)return alert("❌ Fill name and address");state.wallets.push(e),save(),clear(),displayWallets(),alert("✅ Wallet saved!")}function displayWallets(){const e=document.getElementById("wallets");0===state.wallets.length?e.innerHTML='<p style="text-align:center;color:#e0e0ff;margin:20px 0;opacity:0.7;">📭 No wallets yet</p>':e.innerHTML=state.wallets.map(e=>`<div class="wallet"><h3>${e.name}</h3><p><b>${e.type}</b></p><p>${e.address.substring(0,30)}...</p><p>📅 ${e.date}</p><button class="btn btn-secondary" onclick="viewKey(${e.id})" style="width:auto;padding:10px 20px;margin:5px 5px 0 0;">🔑 View</button><button class="btn btn-danger" onclick="delWallet(${e.id})" style="width:auto;padding:10px 20px;">🗑️</button></div>`).join("")}function viewKey(e){const t=state.wallets.find(t=>t.id===e);t&&alert(`🔑 ${t.name}:\n\n${atob(t.key)}\n\n⚠️ Keep secure!`)}function delWallet(e){confirm("🗑️ Delete?")&&(state.wallets=state.wallets.filter(t=>t.id!==e),save(),displayWallets())}function clear(){document.getElementById("name").value="",document.getElementById("address").value="",document.getElementById("key").value=""}function createOTC(){const e={id:Date.now(),type:document.getElementById("otcType").value,crypto:document.getElementById("otcCrypto").value,amount:parseFloat(document.getElementById("otcAmount").value),price:parseFloat(document.getElementById("otcPrice").value),payment:document.getElementById("otcPayment").value,details:document.getElementById("otcDetails").value,contact:document.getElementById("otcContact").value,date:new Date().toLocaleString(),total:(parseFloat(document.getElementById("otcAmount").value)*parseFloat(document.getElementById("otcPrice").value)).toFixed(2)};if(!e.amount||!e.price||!e.contact)return alert("❌ Fill all fields");state.otcTrades.push(e),save(),clearOTCForm(),displayOTC(),alert("✅ Trade created!")}function displayOTC(){const e=document.getElementById("otcList");state.otcTrades&&0!==state.otcTrades.length?e.innerHTML=state.otcTrades.map(e=>`<div class="otc-card"><div style="display:flex;justify-content:space-between;"><h3 style="color:#ffd700;">${e.crypto}</h3><span class="otc-badge ${"buy"===e.type?"otc-buy":"otc-sell"}">${"buy"===e.type?"💵 BUY":"💰 SELL"}</span></div><p>💎 ${e.amount} ${e.crypto}</p><p>💵 $${e.price} per unit</p><div class="otc-total">💰 Total: $${e.total}</div><p>💳 ${e.payment}</p>${e.details?`<p>📝 ${e.details}</p>`:""}<p>📞 ${e.contact}</p><p style="color:#999;font-size:12px;">📅 ${e.date}</p><button class="btn btn-secondary" onclick="shareOTC(${e.id})" style="width:auto;padding:10px 20px;margin:5px 5px 0 0;">📤 Share</button><button class="btn btn-danger" onclick="deleteOTC(${e.id})" style="width:auto;padding:10px 20px;">🗑️</button></div>`).join(""):e.innerHTML='<p style="text-align:center;color:#e0e0ff;margin:20px 0;opacity:0.7;">📭 No trades yet</p>'}function shareOTC(e){const t=state.otcTrades.find(t=>t.id===e);if(!t)return;const n=`🔄 ${t.type.toUpperCase()} ${t.crypto}\n💎 ${t.amount} @ $${t.price}\n💰 $${t.total}\n💳 ${t.payment}\n📞 ${t.contact}`;navigator.share?navigator.share({title:"OTC Trade",text:n}).catch(()=>{}):navigator.clipboard.writeText(n).then(()=>alert("✅ Copied!"))}function deleteOTC(e){confirm("🗑️ Delete trade?")&&(state.otcTrades=state.otcTrades.filter(t=>t.id!==e),save(),displayOTC())}function clearOTCForm(){document.getElementById("otcAmount").value="",document.getElementById("otcPrice").value="",document.getElementById("otcDetails").value="",document.getElementById("otcContact").value=""}function exportData(){const e={wallets:state.wallets,otcTrades:state.otcTrades,date:new Date().toISOString()},t=new Blob([JSON.stringify(e,null,2)],{type:"application/json"}),n=URL.createObjectURL(t),a=document.createElement("a");a.href=n,a.download=`pi-vault-${new Date().toISOString().slice(0,10)}.json`,a.click(),alert("✅ Exported!")}function save(){sessionStorage.setItem("vault",JSON.stringify(state))}window.onload=()=>{const e=sessionStorage.getItem("vault");e&&(state=JSON.parse(e)),localStorage.getItem("loggedIn")&&(state.loggedIn=!0,show("pinScreen"))},document.getElementById("pin").addEventListener("keypress",e=>{"Enter"===e.key&&unlock()});
+    </script>
+</body>
+</html><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -387,130 +123,37 @@
     <script>emailjs.init("T_-SjRTHAsYr0PkpI");</script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Segoe UI', system-ui; 
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 50%, #7303c0 100%);
-            color: #fff; 
-            min-height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            padding: 20px;
-        }
-        .container { 
-            background: rgba(255,255,255,0.15); 
-            backdrop-filter: blur(20px); 
-            border-radius: 25px; 
-            padding: 35px; 
-            max-width: 480px; 
-            width: 100%; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 100px rgba(117,3,192,0.3);
-            border: 2px solid rgba(255,255,255,0.2);
-        }
+        body { font-family: 'Segoe UI', system-ui; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 50%, #7303c0 100%); color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .container { background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); border-radius: 25px; padding: 35px; max-width: 480px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.2); }
         .logo { text-align: center; margin-bottom: 25px; }
-        .logo-img {
-            width: 80px; height: 80px;
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            margin-bottom: 15px;
-            box-shadow: 0 10px 30px rgba(255,215,0,0.4);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(255,215,0,0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 15px 40px rgba(255,215,0,0.6); }
-        }
-        h1 { 
-            font-size: 26px; margin-bottom: 8px; 
-            background: linear-gradient(45deg, #ffd700, #ff8c00, #ffd700);
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            text-align: center; font-weight: 700;
-        }
-        h2 { font-size: 24px; margin-bottom: 20px; color: #ffd700; }
+        .logo-img { width: 80px; height: 80px; background: linear-gradient(135deg, #ffd700, #ff8c00); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 48px; margin-bottom: 15px; box-shadow: 0 10px 30px rgba(255,215,0,0.4); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        h1 { font-size: 26px; margin-bottom: 8px; background: linear-gradient(45deg, #ffd700, #ff8c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; font-weight: 700; }
         .subtitle { text-align: center; color: #e0e0ff; font-size: 14px; margin-bottom: 20px; opacity: 0.9; }
-        input, select, textarea { 
-            width: 100%; padding: 14px 18px; margin: 10px 0; 
-            border: 2px solid rgba(255,255,255,0.2); 
-            border-radius: 12px; background: rgba(0,0,0,0.25); 
-            color: #fff; font-size: 15px; transition: all 0.3s;
-        }
-        input:focus, select:focus, textarea:focus { 
-            outline: none; border-color: #ffd700; 
-            background: rgba(0,0,0,0.35);
-            box-shadow: 0 0 20px rgba(255,215,0,0.3);
-        }
+        input, select, textarea { width: 100%; padding: 14px 18px; margin: 10px 0; border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; background: rgba(0,0,0,0.25); color: #fff; font-size: 15px; transition: all 0.3s; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #ffd700; background: rgba(0,0,0,0.35); box-shadow: 0 0 20px rgba(255,215,0,0.3); }
         input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.5); }
-        .btn { 
-            width: 100%; padding: 14px; margin: 10px 0; border: none; 
-            border-radius: 12px; font-weight: 700; cursor: pointer; 
-            transition: all 0.3s; font-size: 15px;
-            text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .btn-primary { 
-            background: linear-gradient(135deg, #ffd700, #ff8c00); 
-            color: #000; box-shadow: 0 5px 20px rgba(255,215,0,0.4);
-        }
+        .btn { width: 100%; padding: 14px; margin: 10px 0; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-primary { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; box-shadow: 0 5px 20px rgba(255,215,0,0.4); }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255,215,0,0.6); }
         .btn-primary:disabled { background: linear-gradient(135deg, #999, #666); cursor: not-allowed; transform: none; }
         .btn-secondary { background: rgba(255,255,255,0.15); color: #fff; border: 2px solid rgba(255,255,255,0.3); }
-        .btn-secondary:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.5); }
         .btn-danger { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; box-shadow: 0 5px 20px rgba(255,65,108,0.4); }
-        .btn-danger:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255,65,108,0.6); }
-        .hidden { display: none; }
-        .msg { padding: 12px; margin: 12px 0; border-radius: 10px; text-align: center; font-weight: 600; animation: slideIn 0.3s; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .hidden { display: none !important; }
+        .msg { padding: 12px; margin: 12px 0; border-radius: 10px; text-align: center; font-weight: 600; }
         .success { background: rgba(46,204,113,0.25); border: 2px solid #2ecc71; color: #2ecc71; }
         .error { background: rgba(231,76,60,0.25); border: 2px solid #e74c3c; color: #ff6b6b; }
-        .wallet { 
-            background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.2)); 
-            padding: 18px; margin: 12px 0; border-radius: 15px; 
-            border-left: 5px solid #ffd700; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s;
-        }
-        .wallet:hover { transform: translateX(5px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .wallet { background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.2)); padding: 18px; margin: 12px 0; border-radius: 15px; border-left: 5px solid #ffd700; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .wallet h3 { color: #ffd700; margin-bottom: 10px; font-size: 18px; }
         .wallet p { color: #e0e0ff; margin: 5px 0; font-size: 14px; }
-        .modal {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85); display: flex;
-            align-items: center; justify-content: center;
-            z-index: 1000; backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            padding: 35px; border-radius: 20px;
-            min-width: 320px; max-width: 90vw;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-        .pi-badge {
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            color: #000; padding: 8px 16px; border-radius: 20px;
-            font-size: 13px; font-weight: 700; display: inline-block;
-            margin: 10px 0; box-shadow: 0 4px 15px rgba(255,215,0,0.4);
-        }
+        .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: linear-gradient(135deg, #6a11cb, #2575fc); padding: 35px; border-radius: 20px; min-width: 320px; max-width: 90vw; box-shadow: 0 20px 60px rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.2); }
+        .pi-badge { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; display: inline-block; margin: 10px 0; }
         .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .feature-item {
-            background: rgba(0,0,0,0.2); padding: 12px;
-            border-radius: 10px; text-align: center;
-            font-size: 12px; border: 1px solid rgba(255,255,255,0.1);
-        }
+        .feature-item { background: rgba(0,0,0,0.2); padding: 12px; border-radius: 10px; text-align: center; font-size: 12px; border: 1px solid rgba(255,255,255,0.1); }
         .feature-item::before { content: "✓"; display: block; font-size: 20px; color: #ffd700; margin-bottom: 5px; }
-        .otc-card {
-            background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.2));
-            padding: 18px; margin: 12px 0; border-radius: 15px;
-            border-left: 5px solid #2575fc; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .otc-badge {
-            display: inline-block; padding: 4px 12px;
-            border-radius: 15px; font-size: 11px;
-            font-weight: 700; margin: 5px 5px 5px 0;
-        }
+        .otc-card { background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.2)); padding: 18px; margin: 12px 0; border-radius: 15px; border-left: 5px solid #2575fc; }
+        .otc-badge { display: inline-block; padding: 4px 12px; border-radius: 15px; font-size: 11px; font-weight: 700; margin: 5px 5px 5px 0; }
         .otc-buy { background: rgba(46,204,113,0.3); color: #2ecc71; border: 1px solid #2ecc71; }
         .otc-sell { background: rgba(255,193,7,0.3); color: #ffc107; border: 1px solid #ffc107; }
         .otc-total { font-size: 20px; color: #ffd700; font-weight: 700; margin: 10px 0; }
@@ -519,98 +162,62 @@
 <body>
     <div class="container">
         <div id="otpLogin">
-            <div class="logo">
-                <div class="logo-img">π</div>
-                <h1>Pi Network Vault</h1>
-                <p class="subtitle">Secure Your Crypto Assets</p>
-            </div>
+            <div class="logo"><div class="logo-img">π</div><h1>Pi Network Vault</h1><p class="subtitle">Secure Your Crypto Assets</p></div>
             <div id="step1">
                 <input type="email" id="email" placeholder="📧 Enter your email address">
                 <button class="btn btn-primary" onclick="sendCode()" id="sendBtn">🔐 Send Login Code</button>
                 <div id="msg1"></div>
                 <div class="feature-grid">
-                    <div class="feature-item">OTP Login</div>
-                    <div class="feature-item">PIN Secure</div>
-                    <div class="feature-item">Local Storage</div>
-                    <div class="feature-item">OTC Trading</div>
+                    <div class="feature-item">OTP Login</div><div class="feature-item">PIN Secure</div>
+                    <div class="feature-item">Local Storage</div><div class="feature-item">OTC Trading</div>
                 </div>
             </div>
             <div id="step2" class="hidden">
-                <input type="text" id="code" placeholder="🔑 Enter 6-digit code" maxlength="6" style="text-align:center; font-size:24px; letter-spacing:8px;">
-                <button class="btn btn-primary" onclick="verifyCode()">✅ Verify & Login</button>
+                <input type="text" id="code" placeholder="🔑 6-digit code" maxlength="6" style="text-align:center;font-size:24px;letter-spacing:8px;">
+                <button class="btn btn-primary" onclick="verifyCode()">✅ Verify</button>
                 <button class="btn btn-secondary" onclick="backToEmail()">← Back</button>
                 <div id="msg2"></div>
             </div>
         </div>
         <div id="pinScreen" class="hidden">
-            <div class="logo">
-                <div class="logo-img">🔒</div>
-                <h1>Enter Your PIN</h1>
-                <p class="subtitle">Unlock Your Vault</p>
-            </div>
-            <input type="password" id="pin" placeholder="Enter PIN" maxlength="6" style="text-align:center; font-size:28px; letter-spacing:12px;">
-            <button class="btn btn-primary" onclick="unlock()">🔓 Unlock Vault</button>
-            <button class="btn btn-secondary" onclick="setupPin()">⚙️ Set New PIN</button>
+            <div class="logo"><div class="logo-img">🔒</div><h1>Enter Your PIN</h1><p class="subtitle">Unlock Your Vault</p></div>
+            <input type="password" id="pin" placeholder="PIN" maxlength="6" style="text-align:center;font-size:28px;letter-spacing:12px;">
+            <button class="btn btn-primary" onclick="unlock()">🔓 Unlock</button>
+            <button class="btn btn-secondary" onclick="setupPin()">⚙️ Set PIN</button>
             <button class="btn btn-danger" onclick="logout()">🚪 Logout</button>
             <div id="pinMsg"></div>
         </div>
         <div id="vault" class="hidden">
-            <div class="logo">
-                <div class="logo-img">💎</div>
-                <h1>Your Crypto Vault</h1>
-                <div class="pi-badge">🥧 Pi Network Enabled</div>
-            </div>
-            <div style="display:flex; gap:10px; margin:20px 0;">
+            <div class="logo"><div class="logo-img">💎</div><h1>Your Crypto Vault</h1><div class="pi-badge">🥧 Pi Network</div></div>
+            <div style="display:flex;gap:10px;margin:20px 0;">
                 <button class="btn btn-secondary" onclick="showTab('wallets')" id="walletsTab" style="flex:1;">💼 Wallets</button>
                 <button class="btn btn-secondary" onclick="showTab('otc')" id="otcTab" style="flex:1;">🔄 OTC</button>
             </div>
             <div id="walletsSection">
                 <input type="text" id="name" placeholder="💼 Wallet Name">
-                <select id="type">
-                    <option value="Pi Network">🥧 Pi Network (PI)</option>
-                    <option value="Bitcoin">₿ Bitcoin (BTC)</option>
-                    <option value="Ethereum">Ξ Ethereum (ETH)</option>
-                    <option value="Other">📦 Other</option>
-                </select>
-                <input type="text" id="address" placeholder="📍 Wallet Address">
+                <select id="type"><option value="Pi Network">🥧 Pi Network</option><option value="Bitcoin">₿ Bitcoin</option><option value="Ethereum">Ξ Ethereum</option><option value="Other">📦 Other</option></select>
+                <input type="text" id="address" placeholder="📍 Address">
                 <textarea id="key" placeholder="🔑 Private Key" rows="3"></textarea>
-                <button class="btn btn-primary" onclick="saveWallet()">💾 Save Wallet</button>
+                <button class="btn btn-primary" onclick="saveWallet()">💾 Save</button>
                 <div id="wallets"></div>
             </div>
             <div id="otcSection" class="hidden">
-                <select id="otcType">
-                    <option value="buy">💵 Buy Crypto</option>
-                    <option value="sell">💰 Sell Crypto</option>
-                </select>
-                <select id="otcCrypto">
-                    <option value="Pi Network">🥧 Pi Network</option>
-                    <option value="Bitcoin">₿ Bitcoin</option>
-                    <option value="Ethereum">Ξ Ethereum</option>
-                    <option value="USDT">💵 USDT</option>
-                </select>
+                <select id="otcType"><option value="buy">💵 Buy</option><option value="sell">💰 Sell</option></select>
+                <select id="otcCrypto"><option value="Pi Network">🥧 Pi</option><option value="Bitcoin">₿ BTC</option><option value="Ethereum">Ξ ETH</option><option value="USDT">💵 USDT</option></select>
                 <input type="number" id="otcAmount" placeholder="💎 Amount" step="0.01">
-                <input type="number" id="otcPrice" placeholder="💵 Price per unit (USD)" step="0.01">
-                <select id="otcPayment">
-                    <option value="Bank Transfer">🏦 Bank Transfer</option>
-                    <option value="PayPal">💳 PayPal</option>
-                    <option value="Cash">💵 Cash</option>
-                    <option value="Crypto">🪙 Crypto</option>
-                </select>
-                <textarea id="otcDetails" placeholder="📝 Trade details" rows="2"></textarea>
-                <input type="text" id="otcContact" placeholder="📞 Contact (email/phone/telegram)">
-                <button class="btn btn-primary" onclick="createOTC()">📝 Create Trade</button>
+                <input type="number" id="otcPrice" placeholder="💵 Price/unit" step="0.01">
+                <select id="otcPayment"><option value="Bank Transfer">🏦 Bank</option><option value="PayPal">💳 PayPal</option><option value="Cash">💵 Cash</option><option value="Crypto">🪙 Crypto</option></select>
+                <textarea id="otcDetails" placeholder="📝 Details" rows="2"></textarea>
+                <input type="text" id="otcContact" placeholder="📞 Contact">
+                <button class="btn btn-primary" onclick="createOTC()">📝 Create</button>
                 <div id="otcList"></div>
             </div>
-            <div style="margin-top:25px;">
-                <button class="btn btn-secondary" onclick="exportData()">📤 Export</button>
-                <button class="btn btn-danger" onclick="lock()">🔒 Lock</button>
-            </div>
+            <div style="margin-top:25px;"><button class="btn btn-secondary" onclick="exportData()">📤 Export</button><button class="btn btn-danger" onclick="lock()">🔒 Lock</button></div>
         </div>
         <div id="pinModal" class="hidden modal">
-            <div class="modal-content">
-                <h1>Set Your PIN</h1>
+            <div class="modal-content"><h1>Set PIN</h1>
                 <input type="password" id="newPin" placeholder="🔐 New PIN (4-6 digits)" maxlength="6">
-                <input type="password" id="confirmPin" placeholder="🔐 Confirm PIN" maxlength="6">
+                <input type="password" id="confirmPin" placeholder="🔐 Confirm" maxlength="6">
                 <button class="btn btn-primary" onclick="setPin()">✅ Save</button>
                 <button class="btn btn-secondary" onclick="closeModal()">❌ Cancel</button>
                 <div id="modalMsg"></div>
@@ -618,521 +225,7 @@
         </div>
     </div>
     <script>
-        const SVC = "service_sddi48j", TPL = "template_nrvnos9";
-        let state = { locked: true, loggedIn: false, wallets: [], otcTrades: [], userPin: '1234' };
-        window.onload = () => {
-            const saved = sessionStorage.getItem('vault');
-            if (saved) state = JSON.parse(saved);
-            if (localStorage.getItem('loggedIn')) { state.loggedIn = true; show('pinScreen'); }
-        };
-        function show(id) {
-            ['otpLogin','pinScreen','vault','pinModal'].forEach(x => document.getElementById(x).classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-        }
-        function showTab(tab) {
-            if (tab === 'wallets') {
-                document.getElementById('walletsSection').classList.remove('hidden');
-                document.getElementById('otcSection').classList.add('hidden');
-                document.getElementById('walletsTab').style.background = 'linear-gradient(135deg, #ffd700, #ff8c00)';
-                document.getElementById('walletsTab').style.color = '#000';
-                document.getElementById('otcTab').style.background = 'rgba(255,255,255,0.15)';
-                document.getElementById('otcTab').style.color = '#fff';
-            } else {
-                document.getElementById('walletsSection').classList.add('hidden');
-                document.getElementById('otcSection').classList.remove('hidden');
-                document.getElementById('otcTab').style.background = 'linear-gradient(135deg, #ffd700, #ff8c00)';
-                document.getElementById('otcTab').style.color = '#000';
-                document.getElementById('walletsTab').style.background = 'rgba(255,255,255,0.15)';
-                document.getElementById('walletsTab').style.color = '#fff';
-                displayOTC();
-            }
-        }
-        function msg(id, text, type='success') {
-            document.getElementById(id).innerHTML = `<div class="msg ${type}">${text}</div>`;
-            setTimeout(() => document.getElementById(id).innerHTML = '', 3000);
-        }
-        function sendCode() {
-            const email = document.getElementById('email').value.trim();
-            if (!email.includes('@')) return msg('msg1','❌ Invalid email','error');
-            const code = Math.floor(100000 + Math.random()*900000).toString();
-            localStorage.setItem('otp', code);
-            localStorage.setItem('otpExp', Date.now() + 900000);
-            document.getElementById('sendBtn').disabled = true;
-            msg('msg1','📨 Sending...');
-            emailjs.send(SVC, TPL, { to_email: email, passcode: code, time: new Date(Date.now()+900000).toLocaleTimeString() })
-            .then(() => {
-                msg('msg1','✅ Code sent!');
-                document.getElementById('step1').classList.add('hidden');
-                document.getElementById('step2').classList.remove('hidden');
-            }, () => {
-                msg('msg1','❌ Failed','error');
-                document.getElementById('sendBtn').disabled = false;
-            });
-        }
-        function verifyCode() {
-            const input = document.getElementById('code').value.trim();
-            const saved = localStorage.getItem('otp');
-            const exp = parseInt(localStorage.getItem('otpExp'));
-            if (Date.now() > exp) { msg('msg2','⏰ Code expired','error'); return backToEmail(); }
-            if (input === saved) {
-                localStorage.setItem('loggedIn','true');
-                state.loggedIn = true;
-                msg('msg2','✅ Success!');
-                setTimeout(() => show('pinScreen'), 1000);
-            } else { msg('msg2','❌ Wrong code','error'); }
-        }
-        function backToEmail() {
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('step1').classList.remove('hidden');
-            document.getElementById('sendBtn').disabled = false;
-        }
-        function logout() {
-            if (confirm('🚪 Logout?')) {
-                localStorage.removeItem('loggedIn');
-                state = { locked: true, loggedIn: false, wallets: [], otcTrades: [], userPin: '1234' };
-                show('otpLogin');
-            }
-        }
-        function unlock() {
-            const pin = document.getElementById('pin').value;
-            if (pin === state.userPin) {
-                state.locked = false;
-                document.getElementById('pin').value = '';
-                show('vault');
-                showTab('wallets');
-                displayWallets();
-            } else { msg('pinMsg','❌ Wrong PIN','error'); }
-        }
-        function lock() { state.locked = true; show('pinScreen'); }
-        function setupPin() { show('pinModal'); }
-        function closeModal() { show('pinScreen'); }
-        function setPin() {
-            const newPin = document.getElementById('newPin').value;
-            const conf = document.getElementById('confirmPin').value;
-            if (newPin.length < 4) return msg('modalMsg','❌ PIN too short','error');
-            if (!/^\d+$/.test(newPin)) return msg('modalMsg','❌ Numbers only','error');
-            if (newPin !== conf) return msg('modalMsg','❌ PINs dont match','error');
-            state.userPin = newPin;
-            save();
-            msg('modalMsg','✅ PIN saved!');
-            setTimeout(() => closeModal(), 1500);
-        }
-        function saveWallet() {
-            const wallet = {
-                id: Date.now(),
-                name: document.getElementById('name').value,
-                type: document.getElementById('type').value,
-                address: document.getElementById('address').value,
-                key: btoa(document.getElementById('key').value),
-                date: new Date().toLocaleDateString()
-            };
-            if (!wallet.name || !wallet.address) return alert('❌ Fill name and address');
-            state.wallets.push(wallet);
-            save();
-            clear();
-            displayWallets();
-            alert('✅ Wallet saved!');
-        }
-        function displayWallets() {
-            const div = document.getElementById('wallets');
-            if (state.wallets.length === 0) {
-                div.innerHTML = '<p style="text-align:center;color:#e0e0ff;margin:20px 0;opacity:0.7;">📭 No wallets yet</p>';
-                return;
-            }
-            div.innerHTML = state.wallets.map(w => `
-                <div class="wallet">
-                    <h3>${w.name}</h3>
-                    <p><b>${w.type}</b></p>
-                    <p>${w.address.substring(0,30)}...</p>
-                    <p>📅 ${w.date}</p>
-                    <button class="btn btn-secondary" onclick="viewKey(${w.id})" style="width:auto;padding:10px 20px;margin:5px 5px 0 0;">🔑 View</button>
-                    <button class="btn btn-danger" onclick="delWallet(${w.id})" style="width:auto;padding:10px 20px;">🗑️</button>
-                </div>
-            `).join('');
-        }
-        function viewKey(id) {
-            const w = state.wallets.find(x => x.id === id);
-            if (w) alert(`🔑 ${w.name}:\n\n${atob(w.key)}\n\n⚠️ Keep secure!`);
-        }
-        function delWallet(id) {
-            if (confirm('🗑️ Delete?')) {
-                state.wallets = state.wallets.filter(x => x.id !== id);<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pi Network Crypto Vault</title>
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-    <script>emailjs.init("T_-SjRTHAsYr0PkpI");</script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Segoe UI', system-ui; 
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 50%, #7303c0 100%);
-            color: #fff; 
-            min-height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            padding: 20px;
-        }
-        .container { 
-            background: rgba(255,255,255,0.15); 
-            backdrop-filter: blur(20px); 
-            border-radius: 25px; 
-            padding: 35px; 
-            max-width: 480px; 
-            width: 100%; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 100px rgba(117,3,192,0.3);
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-        .logo { text-align: center; margin-bottom: 25px; }
-        .logo-img {
-            width: 80px; height: 80px;
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            margin-bottom: 15px;
-            box-shadow: 0 10px 30px rgba(255,215,0,0.4);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(255,215,0,0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 15px 40px rgba(255,215,0,0.6); }
-        }
-        h1 { 
-            font-size: 26px; margin-bottom: 8px; 
-            background: linear-gradient(45deg, #ffd700, #ff8c00, #ffd700);
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            text-align: center; font-weight: 700;
-        }
-        h2 { font-size: 24px; margin-bottom: 20px; color: #ffd700; }
-        .subtitle { text-align: center; color: #e0e0ff; font-size: 14px; margin-bottom: 20px; opacity: 0.9; }
-        input, select, textarea { 
-            width: 100%; padding: 14px 18px; margin: 10px 0; 
-            border: 2px solid rgba(255,255,255,0.2); 
-            border-radius: 12px; background: rgba(0,0,0,0.25); 
-            color: #fff; font-size: 15px; transition: all 0.3s;
-        }
-        input:focus, select:focus, textarea:focus { 
-            outline: none; border-color: #ffd700; 
-            background: rgba(0,0,0,0.35);
-            box-shadow: 0 0 20px rgba(255,215,0,0.3);
-        }
-        input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.5); }
-        .btn { 
-            width: 100%; padding: 14px; margin: 10px 0; border: none; 
-            border-radius: 12px; font-weight: 700; cursor: pointer; 
-            transition: all 0.3s; font-size: 15px;
-            text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .btn-primary { 
-            background: linear-gradient(135deg, #ffd700, #ff8c00); 
-            color: #000; box-shadow: 0 5px 20px rgba(255,215,0,0.4);
-        }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255,215,0,0.6); }
-        .btn-primary:disabled { background: linear-gradient(135deg, #999, #666); cursor: not-allowed; transform: none; }
-        .btn-secondary { background: rgba(255,255,255,0.15); color: #fff; border: 2px solid rgba(255,255,255,0.3); }
-        .btn-secondary:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.5); }
-        .btn-danger { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; box-shadow: 0 5px 20px rgba(255,65,108,0.4); }
-        .btn-danger:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255,65,108,0.6); }
-        .hidden { display: none; }
-        .msg { padding: 12px; margin: 12px 0; border-radius: 10px; text-align: center; font-weight: 600; animation: slideIn 0.3s; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .success { background: rgba(46,204,113,0.25); border: 2px solid #2ecc71; color: #2ecc71; }
-        .error { background: rgba(231,76,60,0.25); border: 2px solid #e74c3c; color: #ff6b6b; }
-        .wallet { 
-            background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.2)); 
-            padding: 18px; margin: 12px 0; border-radius: 15px; 
-            border-left: 5px solid #ffd700; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s;
-        }
-        .wallet:hover { transform: translateX(5px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .wallet h3 { color: #ffd700; margin-bottom: 10px; font-size: 18px; }
-        .wallet p { color: #e0e0ff; margin: 5px 0; font-size: 14px; }
-        .modal {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85); display: flex;
-            align-items: center; justify-content: center;
-            z-index: 1000; backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            padding: 35px; border-radius: 20px;
-            min-width: 320px; max-width: 90vw;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-        .pi-badge {
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            color: #000; padding: 8px 16px; border-radius: 20px;
-            font-size: 13px; font-weight: 700; display: inline-block;
-            margin: 10px 0; box-shadow: 0 4px 15px rgba(255,215,0,0.4);
-        }
-        .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .feature-item {
-            background: rgba(0,0,0,0.2); padding: 12px;
-            border-radius: 10px; text-align: center;
-            font-size: 12px; border: 1px solid rgba(255,255,255,0.1);
-        }
-        .feature-item::before { content: "✓"; display: block; font-size: 20px; color: #ffd700; margin-bottom: 5px; }
-        .otc-card {
-            background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.2));
-            padding: 18px; margin: 12px 0; border-radius: 15px;
-            border-left: 5px solid #2575fc; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .otc-badge {
-            display: inline-block; padding: 4px 12px;
-            border-radius: 15px; font-size: 11px;
-            font-weight: 700; margin: 5px 5px 5px 0;
-        }
-        .otc-buy { background: rgba(46,204,113,0.3); color: #2ecc71; border: 1px solid #2ecc71; }
-        .otc-sell { background: rgba(255,193,7,0.3); color: #ffc107; border: 1px solid #ffc107; }
-        .otc-total { font-size: 20px; color: #ffd700; font-weight: 700; margin: 10px 0; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div id="otpLogin">
-            <div class="logo">
-                <div class="logo-img">π</div>
-                <h1>Pi Network Vault</h1>
-                <p class="subtitle">Secure Your Crypto Assets</p>
-            </div>
-            <div id="step1">
-                <input type="email" id="email" placeholder="📧 Enter your email address">
-                <button class="btn btn-primary" onclick="sendCode()" id="sendBtn">🔐 Send Login Code</button>
-                <div id="msg1"></div>
-                <div class="feature-grid">
-                    <div class="feature-item">OTP Login</div>
-                    <div class="feature-item">PIN Secure</div>
-                    <div class="feature-item">Local Storage</div>
-                    <div class="feature-item">OTC Trading</div>
-                </div>
-            </div>
-            <div id="step2" class="hidden">
-                <input type="text" id="code" placeholder="🔑 Enter 6-digit code" maxlength="6" style="text-align:center; font-size:24px; letter-spacing:8px;">
-                <button class="btn btn-primary" onclick="verifyCode()">✅ Verify & Login</button>
-                <button class="btn btn-secondary" onclick="backToEmail()">← Back</button>
-                <div id="msg2"></div>
-            </div>
-        </div>
-        <div id="pinScreen" class="hidden">
-            <div class="logo">
-                <div class="logo-img">🔒</div>
-                <h1>Enter Your PIN</h1>
-                <p class="subtitle">Unlock Your Vault</p>
-            </div>
-            <input type="password" id="pin" placeholder="Enter PIN" maxlength="6" style="text-align:center; font-size:28px; letter-spacing:12px;">
-            <button class="btn btn-primary" onclick="unlock()">🔓 Unlock Vault</button>
-            <button class="btn btn-secondary" onclick="setupPin()">⚙️ Set New PIN</button>
-            <button class="btn btn-danger" onclick="logout()">🚪 Logout</button>
-            <div id="pinMsg"></div>
-        </div>
-        <div id="vault" class="hidden">
-            <div class="logo">
-                <div class="logo-img">💎</div>
-                <h1>Your Crypto Vault</h1>
-                <div class="pi-badge">🥧 Pi Network Enabled</div>
-            </div>
-            <div style="display:flex; gap:10px; margin:20px 0;">
-                <button class="btn btn-secondary" onclick="showTab('wallets')" id="walletsTab" style="flex:1;">💼 Wallets</button>
-                <button class="btn btn-secondary" onclick="showTab('otc')" id="otcTab" style="flex:1;">🔄 OTC</button>
-            </div>
-            <div id="walletsSection">
-                <input type="text" id="name" placeholder="💼 Wallet Name">
-                <select id="type">
-                    <option value="Pi Network">🥧 Pi Network (PI)</option>
-                    <option value="Bitcoin">₿ Bitcoin (BTC)</option>
-                    <option value="Ethereum">Ξ Ethereum (ETH)</option>
-                    <option value="Other">📦 Other</option>
-                </select>
-                <input type="text" id="address" placeholder="📍 Wallet Address">
-                <textarea id="key" placeholder="🔑 Private Key" rows="3"></textarea>
-                <button class="btn btn-primary" onclick="saveWallet()">💾 Save Wallet</button>
-                <div id="wallets"></div>
-            </div>
-            <div id="otcSection" class="hidden">
-                <select id="otcType">
-                    <option value="buy">💵 Buy Crypto</option>
-                    <option value="sell">💰 Sell Crypto</option>
-                </select>
-                <select id="otcCrypto">
-                    <option value="Pi Network">🥧 Pi Network</option>
-                    <option value="Bitcoin">₿ Bitcoin</option>
-                    <option value="Ethereum">Ξ Ethereum</option>
-                    <option value="USDT">💵 USDT</option>
-                </select>
-                <input type="number" id="otcAmount" placeholder="💎 Amount" step="0.01">
-                <input type="number" id="otcPrice" placeholder="💵 Price per unit (USD)" step="0.01">
-                <select id="otcPayment">
-                    <option value="Bank Transfer">🏦 Bank Transfer</option>
-                    <option value="PayPal">💳 PayPal</option>
-                    <option value="Cash">💵 Cash</option>
-                    <option value="Crypto">🪙 Crypto</option>
-                </select>
-                <textarea id="otcDetails" placeholder="📝 Trade details" rows="2"></textarea>
-                <input type="text" id="otcContact" placeholder="📞 Contact (email/phone/telegram)">
-                <button class="btn btn-primary" onclick="createOTC()">📝 Create Trade</button>
-                <div id="otcList"></div>
-            </div>
-            <div style="margin-top:25px;">
-                <button class="btn btn-secondary" onclick="exportData()">📤 Export</button>
-                <button class="btn btn-danger" onclick="lock()">🔒 Lock</button>
-            </div>
-        </div>
-        <div id="pinModal" class="hidden modal">
-            <div class="modal-content">
-                <h1>Set Your PIN</h1>
-                <input type="password" id="newPin" placeholder="🔐 New PIN (4-6 digits)" maxlength="6">
-                <input type="password" id="confirmPin" placeholder="🔐 Confirm PIN" maxlength="6">
-                <button class="btn btn-primary" onclick="setPin()">✅ Save</button>
-                <button class="btn btn-secondary" onclick="closeModal()">❌ Cancel</button>
-                <div id="modalMsg"></div>
-            </div>
-        </div>
-    </div>
-    <script>
-        const SVC = "service_sddi48j", TPL = "template_nrvnos9";
-        let state = { locked: true, loggedIn: false, wallets: [], otcTrades: [], userPin: '1234' };
-        window.onload = () => {
-            const saved = sessionStorage.getItem('vault');
-            if (saved) state = JSON.parse(saved);
-            if (localStorage.getItem('loggedIn')) { state.loggedIn = true; show('pinScreen'); }
-        };
-        function show(id) {
-            ['otpLogin','pinScreen','vault','pinModal'].forEach(x => document.getElementById(x).classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-        }
-        function showTab(tab) {
-            if (tab === 'wallets') {
-                document.getElementById('walletsSection').classList.remove('hidden');
-                document.getElementById('otcSection').classList.add('hidden');
-                document.getElementById('walletsTab').style.background = 'linear-gradient(135deg, #ffd700, #ff8c00)';
-                document.getElementById('walletsTab').style.color = '#000';
-                document.getElementById('otcTab').style.background = 'rgba(255,255,255,0.15)';
-                document.getElementById('otcTab').style.color = '#fff';
-            } else {
-                document.getElementById('walletsSection').classList.add('hidden');
-                document.getElementById('otcSection').classList.remove('hidden');
-                document.getElementById('otcTab').style.background = 'linear-gradient(135deg, #ffd700, #ff8c00)';
-                document.getElementById('otcTab').style.color = '#000';
-                document.getElementById('walletsTab').style.background = 'rgba(255,255,255,0.15)';
-                document.getElementById('walletsTab').style.color = '#fff';
-                displayOTC();
-            }
-        }
-        function msg(id, text, type='success') {
-            document.getElementById(id).innerHTML = `<div class="msg ${type}">${text}</div>`;
-            setTimeout(() => document.getElementById(id).innerHTML = '', 3000);
-        }
-        function sendCode() {
-            const email = document.getElementById('email').value.trim();
-            if (!email.includes('@')) return msg('msg1','❌ Invalid email','error');
-            const code = Math.floor(100000 + Math.random()*900000).toString();
-            localStorage.setItem('otp', code);
-            localStorage.setItem('otpExp', Date.now() + 900000);
-            document.getElementById('sendBtn').disabled = true;
-            msg('msg1','📨 Sending...');
-            emailjs.send(SVC, TPL, { to_email: email, passcode: code, time: new Date(Date.now()+900000).toLocaleTimeString() })
-            .then(() => {
-                msg('msg1','✅ Code sent!');
-                document.getElementById('step1').classList.add('hidden');
-                document.getElementById('step2').classList.remove('hidden');
-            }, () => {
-                msg('msg1','❌ Failed','error');
-                document.getElementById('sendBtn').disabled = false;
-            });
-        }
-        function verifyCode() {
-            const input = document.getElementById('code').value.trim();
-            const saved = localStorage.getItem('otp');
-            const exp = parseInt(localStorage.getItem('otpExp'));
-            if (Date.now() > exp) { msg('msg2','⏰ Code expired','error'); return backToEmail(); }
-            if (input === saved) {
-                localStorage.setItem('loggedIn','true');
-                state.loggedIn = true;
-                msg('msg2','✅ Success!');
-                setTimeout(() => show('pinScreen'), 1000);
-            } else { msg('msg2','❌ Wrong code','error'); }
-        }
-        function backToEmail() {
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('step1').classList.remove('hidden');
-            document.getElementById('sendBtn').disabled = false;
-        }
-        function logout() {
-            if (confirm('🚪 Logout?')) {
-                localStorage.removeItem('loggedIn');
-                state = { locked: true, loggedIn: false, wallets: [], otcTrades: [], userPin: '1234' };
-                show('otpLogin');
-            }
-        }
-        function unlock() {
-            const pin = document.getElementById('pin').value;
-            if (pin === state.userPin) {
-                state.locked = false;
-                document.getElementById('pin').value = '';
-                show('vault');
-                showTab('wallets');
-                displayWallets();
-            } else { msg('pinMsg','❌ Wrong PIN','error'); }
-        }
-        function lock() { state.locked = true; show('pinScreen'); }
-        function setupPin() { show('pinModal'); }
-        function closeModal() { show('pinScreen'); }
-        function setPin() {
-            const newPin = document.getElementById('newPin').value;
-            const conf = document.getElementById('confirmPin').value;
-            if (newPin.length < 4) return msg('modalMsg','❌ PIN too short','error');
-            if (!/^\d+$/.test(newPin)) return msg('modalMsg','❌ Numbers only','error');
-            if (newPin !== conf) return msg('modalMsg','❌ PINs dont match','error');
-            state.userPin = newPin;
-            save();
-            msg('modalMsg','✅ PIN saved!');
-            setTimeout(() => closeModal(), 1500);
-        }
-        function saveWallet() {
-            const wallet = {
-                id: Date.now(),
-                name: document.getElementById('name').value,
-                type: document.getElementById('type').value,
-                address: document.getElementById('address').value,
-                key: btoa(document.getElementById('key').value),
-                date: new Date().toLocaleDateString()
-            };
-            if (!wallet.name || !wallet.address) return alert('❌ Fill name and address');
-            state.wallets.push(wallet);
-            save();
-            clear();
-            displayWallets();
-            alert('✅ Wallet saved!');
-        }
-        function displayWallets() {
-            const div = document.getElementById('wallets');
-            if (state.wallets.length === 0) {
-                div.innerHTML = '<p style="text-align:center;color:#e0e0ff;margin:20px 0;opacity:0.7;">📭 No wallets yet</p>';
-                return;
-            }
-            div.innerHTML = state.wallets.map(w => `
-                <div class="wallet">
-                    <h3>${w.name}</h3>
-                    <p><b>${w.type}</b></p>
-                    <p>${w.address.substring(0,30)}...</p>
-                    <p>📅 ${w.date}</p>
-                    <button class="btn btn-secondary" onclick="viewKey(${w.id})" style="width:auto;padding:10px 20px;margin:5px 5px 0 0;">🔑 View</button>
-                    <button class="btn btn-danger" onclick="delWallet(${w.id})" style="width:auto;padding:10px 20px;">🗑️</button>
-                </div>
-            `).join('');
-        }
-        function viewKey(id) {
-            const w = state.wallets.find(x => x.id === id);
-            if (w) alert(`🔑 ${w.name}:\n\n${atob(w.key)}\n\n⚠️ Keep secure!`);
-        }
-        function delWallet(id) {
-            if (confirm('🗑️ Delete?')) {
-                state.wallets = state.wallets.filter(x => x.id !== id);
+        const SVC="service_sddi48j",TPL="template_nrvnos9";let state={locked:!0,loggedIn:!1,wallets:[],otcTrades:[],userPin:"1234"};function show(e){["otpLogin","pinScreen","vault","pinModal"].forEach(t=>document.getElementById(t).classList.add("hidden")),document.getElementById(e).classList.remove("hidden")}function showTab(e){"wallets"===e?(document.getElementById("walletsSection").classList.remove("hidden"),document.getElementById("otcSection").classList.add("hidden"),document.getElementById("walletsTab").style.background="linear-gradient(135deg, #ffd700, #ff8c00)",document.getElementById("walletsTab").style.color="#000",document.getElementById("otcTab").style.background="rgba(255,255,255,0.15)",document.getElementById("otcTab").style.color="#fff"):(document.getElementById("walletsSection").classList.add("hidden"),document.getElementById("otcSection").classList.remove("hidden"),document.getElementById("otcTab").style.background="linear-gradient(135deg, #ffd700, #ff8c00)",document.getElementById("otcTab").style.color="#000",document.getElementById("walletsTab").style.background="rgba(255,255,255,0.15)",document.getElementById("walletsTab").style.color="#fff",displayOTC())}function msg(e,t,n="success"){document.getElementById(e).innerHTML=`<div class="msg ${n}">${t}</div>`,setTimeout(()=>document.getElementById(e).innerHTML="",3e3)}function sendCode(){const e=document.getElementById("email").value.trim();if(!e.includes("@"))return msg("msg1","❌ Invalid email","error");const t=Math.floor(1e5+9e5*Math.random()).toString();localStorage.setItem("otp",t),localStorage.setItem("otpExp",Date.now()+9e5),document.getElementById("sendBtn").disabled=!0,msg("msg1","📨 Sending..."),emailjs.send(SVC,TPL,{to_email:e,passcode:t,time:new Date(Date.now()+9e5).toLocaleTimeString()}).then(()=>{msg("msg1","✅ Code sent!"),document.getElementById("step1").classList.add("hidden"),document.getElementById("step2").classList.remove("hidden")},()=>{msg("msg1","❌ Failed","error"),document.getElementById("sendBtn").disabled=!1})}function verifyCode(){const e=document.getElementById("code").value.trim(),t=localStorage.getItem("otp"),n=parseInt(localStorage.getItem("otpExp"));if(Date.now()>n)return msg("msg2","⏰ Code expired","error"),backToEmail();e===t?(localStorage.setItem("loggedIn","true"),state.loggedIn=!0,msg("msg2","✅ Success!"),setTimeout(()=>show("pinScreen"),1e3)):msg("msg2","❌ Wrong code","error")}function backToEmail(){document.getElementById("step2").classList.add("hidden"),document.getElementById("step1").classList.remove("hidden"),document.getElementById("sendBtn").disabled=!1}function logout(){confirm("🚪 Logout?")&&(localStorage.removeItem("loggedIn"),state={locked:!0,loggedIn:!1,wallets:[],otcTrades:[],userPin:"1234"},show("otpLogin"))}function unlock(){const e=document.getElementById("pin").value;e===state.userPin?(state.locked=!1,document.getElementById("pin").value="",show("vault"),showTab("wallets"),displayWallets()):msg("pinMsg","❌ Wrong PIN","error")}function lock(){state.locked=!0,show("pinScreen")}function setupPin(){show("pinModal")}function closeModal(){show("pinScreen")}function setPin(){const e=document.getElementById("newPin").value,t=document.getElementById("confirmPin").value;if(e.length<4)return msg("modalMsg","❌ PIN too short","error");if(!/^\d+$/.test(e))return msg("modalMsg","❌ Numbers only","error");if(e!==t)return msg("modalMsg","❌ PINs dont match","error");state.userPin=e,save(),msg("modalMsg","✅ PIN saved!"),setTimeout(()=>closeModal(),1500)}function saveWallet(){const e={id:Date.now(),name:document.getElementById("name").value,type:document.getElementById("type").value,address:document.getElementById("address").value,key:btoa(document.getElementById("key").value),date:new Date().toLocaleDateString()};if(!e.name||!e.address)return alert("❌ Fill name and address");state.wallets.push(e),save(),clear(),displayWallets(),alert("✅ Wallet saved!")}function displayWallets(){const e=document.getElementById("wallets");0===state.wallets.length?e.innerHTML='<p style="text-align:center;color:#e0e0ff;margin:20px 0;opacity:0.7;">📭 No wallets yet</p>':e.innerHTML=state.wallets.map(e=>`<div class="wallet"><h3>${e.name}</h3><p><b>${e.type}</b></p><p>${e.address.substring(0,30)}...</p><p>📅 ${e.date}</p><button class="btn btn-secondary" onclick="viewKey(${e.id})" style="width:auto;padding:10px 20px;margin:5px 5px 0 0;">🔑 View</button><button class="btn btn-danger" onclick="delWallet(${e.id})" style="width:auto;padding:10px 20px;">🗑️</button></div>`).join("")}function viewKey(e){const t=state.wallets.find(t=>t.id===e);t&&alert(`🔑 ${t.name}:\n\n${atob(t.key)}\n\n⚠️ Keep secure!`)}function delWallet(e){confirm("🗑️ Delete?")&&(state.wallets=state.wallets.filter(t=>t.id!==e),save(),displayWallets())}function clear(){document.getElementById("name").value="",document.getElementById("address").value="",document.getElementById("key").value=""}function createOTC(){const e={id:Date.now(),type:document.getElementById("otcType").value,crypto:document.getElementById("otcCrypto").value,amount:parseFloat(document.getElementById("otcAmount").value),price:parseFloat(document.getElementById("otcPrice").value),payment:document.getElementById("otcPayment").value,details:document.getElementById("otcDetails").value,contact:document.getElementById("otcContact").value,date:new Date().toLocaleString(),total:(parseFloat(document.getElementById("otcAmount").value)*parseFloat(document.getElementById("otcPrice").value)).toFixed(2)};if(!e.amount||!e.price||!e.contact)return alert("❌ Fill all fields");state.otcTrades.push(e),save(),clearOTCForm(),displayOTC(),alert("✅ Trade created!")}function displayOTC(){const e=document.getElementById("otcList");state.otcTrades&&0!==state.otcTrades.length?e.innerHTML=state.otcTrades.map(e=>`<div class="otc-card"><div style="display:flex;justify-content:space-between;"><h3 style="color:#ffd700;">${e.crypto}</h3><span class="otc-badge ${"buy"===e.type?"otc-buy":"otc-sell"}">${"buy"===e.type?"💵 BUY":"💰 SELL"}</span></div><p>💎 ${e.amount} ${e.crypto}</p><p>💵 $${e.price} per unit</p><div class="otc-total">💰 Total: $${e.total}</div><p>💳 ${e.payment}</p>${e.details?`<p>📝 ${e.details}</p>`:""}<p>📞 ${e.contact}</p><p style="color:#999;font-size:12px;">📅 ${e.date}</p><button class="btn btn-secondary" onclick="shareOTC(${e.id})" style="width:auto;padding:10px 20px;margin:5px 5px 0 0;">📤 Share</button><button class="btn btn-danger" onclick="deleteOTC(${e.id})" style="width:auto;padding:10px 20px;">🗑️</button></div>`).join(""):e.innerHTML='<p style="text-align:center;color:#e0e0ff;margin:20px 0;opacity:0.7;">📭 No trades yet</p>'}function shareOTC(e){const t=state.otcTrades.find(t=>t.id===e);if(!t)return;const n=`🔄 ${t.type.toUpperCase()} ${t.crypto}\n💎 ${t.amount} @ $${t.price}\n💰 $${t.total}\n💳 ${t.payment}\n📞 ${t.contact}`;navigator.share?navigator.share({title:"OTC Trade",text:n}).catch(()=>{}):navigator.clipboard.writeText(n).then(()=>alert("✅ Copied!"))}function deleteOTC(e){confirm("🗑️ Delete trade?")&&(state.otcTrades=state.otcTrades.filter(t=>t.id!==e),save(),displayOTC())}function clearOTCForm(){document.getElementById("otcAmount").value="",document.getElementById("otcPrice").value="",document.getElementById("otcDetails").value="",document.getElementById("otcContact").value=""}function exportData(){const e={wallets:state.wallets,otcTrades:state.otcTrades,date:new Date().toISOString()},t=new Blob([JSON.stringify(e,null,2)],{type:"application/json"}),n=URL.createObjectURL(t),a=document.createElement("a");a.href=n,a.download=`pi-vault-${new Date().toISOString().slice(0,10)}.json`,a.click(),alert("✅ Exported!")}function save(){sessionStorage.setItem("vault",JSON.stringify(state))}window.onload=()=>{const e=sessionStorage.getItem("vault");e&&(state=JSON.parse(e)),localStorage.getItem("loggedIn")&&(state.loggedIn=!0,show("pinScreen"))},document.getElementById("pin").addEventListener("keypress",e=>{"Enter"===e.key&&unlock()});
+    </script>
+</body>
+</html>

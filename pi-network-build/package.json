@@ -1,0 +1,15 @@
+{
+  "name": "crypto-vault",
+  "version": "1.0.0",
+  "description": "Secure cryptocurrency wallet manager for Pi Network",
+  "main": "public/index.html",
+  "scripts": {
+    "start": "serve public",
+    "build": "echo 'Build complete'"
+  },
+  "keywords": ["pi-network", "crypto", "wallet", "security", "otp", "login"],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

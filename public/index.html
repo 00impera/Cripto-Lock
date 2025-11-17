@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Crypto Vault</title>
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+(function(){
+  emailjs.init("T_-SjRTHAsYr0PkpI"); // Your EmailJS Public Key
+})();
+</script>
+<style>
+body { font-family: system-ui, sans-serif; background: #f5f6fa; }
+.container { max-width: 400px; margin: 60px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px #0001; padding: 32px; }
+.hidden { display: none; }
+input, button { width: 100%; margin: 8px 0; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
+button { background: #2196f3; color: #fff; border: none; font-weight: bold; cursor: pointer; }
+button:disabled { background: #90caf9; }
+.msg { margin: 10px 0; color: #2196f3; }
+.error { color: #f44336; }
+.vault-container { display: none; }
+</style>
+</head>
+<body>
+<div class="container" id="otpLogin">
+  <h2>Login to Crypto Vault</h2>
+  <div id="step1">
+    <input type="email" id="userEmail" placeholder="Enter your email" required />
+    <button onclick="sendLoginCode()" id="sendBtn">Send Login Code</button>
+    <div id="msg1" class="msg"></div>
+  </div>
+  <div id="step2" class="hidden">
+    <input type="text" id="codeInput" placeholder="Enter code from email" maxlength="6" />
+    <button onclick="verifyCode()">Login</button>
+    <div id="msg2" class="msg"></div>
+  </div>
+</div>
+<div class="vault-container">
+<h1>🔐 Crypto Vault</h1>
+<p class="subtitle">Secure Local Storage for Your Cryptocurrency Wallets</p>
+<div id="instructionsModal" class="modal hidden">
+<div class="modal-content">
+<div class="modal-header">
+<h2>How to Use</h2>
+<button class="close-btn" id="closeModalBtn">&times;</button>
+</div>
+<ul>
+<li>Set a strong PIN and owner name for your vault.</li>
+<li>Add your cryptocurrency wallets securely.</li>
+<li>Unlock your vault with your PIN to access wallets.</li>
+<li>Use export to backup your wallets.</li>
+<li>Data is stored locally in your browser.</li>
+</ul>
+<button id="closeModalBtn2">Close</button>
+</div>
+</div>
+<div id="setupScreen">
+<div class="input-group">
+<label>Owner Name</label>
+<input type="text" id="ownerName" placeholder="Enter your name">
+</div>
+<div class="input-group">
+<label>Create 4-Digit PIN</label>
+<input type="password" id="setupPin" maxlength="4" placeholder="Enter PIN">
+</div>
+<div class="input-group">
+<label>Confirm PIN</label>
+<input type="password" id="confirmPin" maxlength="4" placeholder="Confirm PIN">
+</div>
+<div id="setupError" class="status-message error hidden"></div>
+<button id="createVaultBtn">🔒 Create Vault</button>
+<button class="secondary-btn" id="showInstructionsBtn">📖 Instructions</button>
+</div>
+<div id="lockedScreen" class="hidden">
+<div class="owner-tag" id="ownerDisplay"></div>
+<div class="input-group">
+<label>Enter PIN to Unlock</label>
+<input type="password" id="unlockPin" maxlength="4" placeholder="Enter your PIN">
+</div>
+<div id="unlockError" class="status-message error hidden"></div>
+<button id="unlockVaultBtn">🔓 Unlock Vault</button>
+<button class="danger-btn" id="resetVaultBtn">🗑️ Reset Vault</button>
+</div>
+<div id="unlockedScreen" class="hidden">
+<div class="owner-tag" id="unlockedOwnerDisplay"></div>
+<div class="stats">
+<div class="stat-item">
+<div class="stat-value" id="walletCount">0</div>
+<div class="stat-label">Wallets</div>
+</div>
+<div class="stat-item">
+<div class="stat-value" id="timeRemaining">∞</div>
+<div class="stat-label">Auto-Lock</div>
+</div>
+</div>
+<button id="showAddWalletBtn">➕ Add Wallet</button>
+<button class="secondary-btn" id="exportWalletsBtn">💾 Export Wallets</button>
+<button class="secondary-btn" id="lockVaultBtn">🔒 Lock Vault</button>
+<div id="addWalletForm" class="hidden" style="margin-top:20px">
+<h3>Add New Wallet</h3>
+<div class="input-group">
+<label>Wallet Name</label>
+<input type="text" id="walletName" placeholder="e.g., Bitcoin Main">
+</div>
+<div class="input-group">
+<label>Cryptocurrency</label>
+<input type="text" id="cryptoType" placeholder="e.g., BTC, ETH, PI">
+</div>
+<div class="input-group">
+<label>Address</label>
+<input type="text" id="walletAddress" placeholder="Public address">
+</div>
+<div class="input-group">
+<label>Private Key (Optional)</label>
+<textarea id="privateKey" rows="3" placeholder="Private key or seed phrase"></textarea>
+</div>
+<div class="input-group">
+<label>Notes (Optional)</label>
+<textarea id="notes" rows="2" placeholder="Additional information"></textarea>
+</div>
+<button id="saveWalletBtn">💾 Save Wallet</button>
+<button class="secondary-btn" id="cancelAddWalletBtn">Cancel</button>
+</div>
+<div id="walletsList" style="margin-top:30px"></div>
+</div>
+</div>
+<script>
+const SERVICE_ID = "service_abc123"; // <-- Replace with your real EmailJS Service ID
+const TEMPLATE_ID = "template_nrvnos9";
+
+function sendLoginCode() {
+  const email = document.getElementById('userEmail').value.trim();
+  const msg1 = document.getElementById('msg1');
+  if (!email) {
+    msg1.textContent = "Please enter your email.";
+    msg1.className = "msg error";
+    return;
+  }
+  const code = Math.floor(100000 + Math.random() * 900000);
+  const now = new Date();
+  const expire = new Date(now.getTime() + 15*60000);
+  const expireStr = expire.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  localStorage.setItem('loginCode', code);
+  localStorage.setItem('loginCodeExpire', expire.getTime());
+
+  document.getElementById('sendBtn').disabled = true;
+  msg1.textContent = "Sending code...";
+  msg1.className = "msg";
+  emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+    email: email,
+    passcode: code,
+    time: expireStr
+  }).then(function(response) {
+    msg1.textContent = "Code sent! Check your email.";
+    msg1.className = "msg";
+    document.getElementById('step1').classList.add('hidden');
+    document.getElementById('step2').classList.remove('hidden');
+  }, function(error) {
+    msg1.textContent = "Failed to send email. Try again.";
+    msg1.className = "msg error";
+    document.getElementById('sendBtn').disabled = false;
+  });
+}
+
+function verifyCode() {
+  const input = document.getElementById('codeInput').value.trim();
+  const code = localStorage.getItem('loginCode');
+  const expire = parseInt(localStorage.getItem('loginCodeExpire'), 10);
+  const msg2 = document.getElementById('msg2');
+  if (!input) {
+    msg2.textContent = "Please enter the code.";
+    msg2.className = "msg error";
+    return;
+  }
+  if (Date.now() > expire) {
+    msg2.textContent = "Code expired. Please request a new one.";
+    msg2.className = "msg error";
+    document.getElementById('step2').classList.add('hidden');
+    document.getElementById('step1').classList.remove('hidden');
+    document.getElementById('sendBtn').disabled = false;
+    return;
+  }
+  if (input === code) {
+    msg2.textContent = "Login successful!";
+    msg2.className = "msg";
+    document.getElementById('otpLogin').classList.add('hidden');
+    document.querySelector('.vault-container').style.display = "block";
+    localStorage.removeItem('loginCode');
+    localStorage.removeItem('loginCodeExpire');
+  } else {
+    msg2.textContent = "Incorrect code.";
+    msg2.className = "msg error";
+  }
+}
+
+// Vault logic (unchanged)
+let v={owner:'',pin:'',wallets:[],failedAttempts:0,lastFailedAttempt:null},t=null;const T=3e5,M=3,L=18e5;function load(){const s=localStorage.getItem('cryptoVault');s&&(v=JSON.parse(s),showLocked())}function save(){localStorage.setItem('cryptoVault',JSON.stringify(v))}function setup(){const o=document.getElementById('ownerName').value.trim(),p=document.getElementById('setupPin').value,c=document.getElementById('confirmPin').value,e=document.getElementById('setupError');if(e.classList.add('hidden'),!o)return err(e,'Please enter an owner name');if(4!==p.length||!/^\d{4}$/.test(p))return err(e,'PIN must be exactly 4 digits');if(p!==c)return err(e,'PINs do not match');if(weak(p))return err(e,'PIN is too weak');v.owner=o,v.pin=btoa(p),v.wallets=[],v.failedAttempts=0,v.lastFailedAttempt=null,save(),showLocked()}function showLocked(){document.getElementById('setupScreen').classList.add('hidden'),document.getElementById('unlockedScreen').classList.add('hidden'),document.getElementById('lockedScreen').classList.remove('hidden'),document.getElementById('ownerDisplay').textContent=`👤 ${v.owner}'s Vault`,document.getElementById('unlockPin').value=''}function unlock(){const p=document.getElementById('unlockPin').value,e=document.getElementById('unlockError');if(e.classList.add('hidden'),v.lastFailedAttempt&&Date.now()-v.lastFailedAttempt<L){const r=Math.ceil((L-(Date.now()-v.lastFailedAttempt))/6e4);return err(e,`Vault locked. Try again in ${r} minutes`)}if(btoa(p)===v.pin)v.failedAttempts=0,v.lastFailedAttempt=null,save(),showUnlocked();else{v.failedAttempts++,v.lastFailedAttempt=Date.now(),save();err(e,v.failedAttempts>=M?'Too many failed attempts. Vault locked for 30 minutes':`Incorrect PIN. ${M-v.failedAttempts} attempts remaining`)}}function showUnlocked(){document.getElementById('setupScreen').classList.add('hidden'),document.getElementById('lockedScreen').classList.add('hidden'),document.getElementById('unlockedScreen').classList.remove('hidden'),document.getElementById('unlockedOwnerDisplay').textContent=`👤 ${v.owner}'s Vault`,updateList(),startTimer()}function startTimer(){clearTimer();let r=T;t=setInterval(()=>{r-=1e3;const m=Math.floor(r/6e4),s=Math.floor(r%6e4/1e3);document.getElementById('timeRemaining').textContent=`${m}:${s.toString().padStart(2,'0')}`,r<=0&&lock()},1e3)}function clearTimer(){t&&(clearInterval(t),t=null)}function lock(){clearTimer(),document.getElementById('addWalletForm').classList.add('hidden'),showLocked()}function showAdd(){document.getElementById('addWalletForm').classList.remove('hidden'),document.getElementById('walletName').value='',document.getElementById('cryptoType').value='',document.getElementById('walletAddress').value='',document.getElementById('privateKey').value='',document.getElementById('notes').value=''}function cancelAdd(){document.getElementById('addWalletForm').classList.add('hidden')}function add(){const n=document.getElementById('walletName').value.trim(),c=document.getElementById('cryptoType').value.trim(),a=document.getElementById('walletAddress').value.trim(),p=document.getElementById('privateKey').value.trim(),o=document.getElementById('notes').value.trim();if(!n||!c||!a)return alert('Please fill in all required fields');const w={id:Date.now(),name:n,crypto:c,address:a,privateKey:p?btoa(p):'',notes:o,created:new Date().toISOString()};v.wallets.push(w),save(),cancelAdd(),updateList()}function updateList(){const l=document.getElementById('walletsList');if(document.getElementById('walletCount').textContent=v.wallets.length,0===v.wallets.length)return void(l.innerHTML='<p style="text-align:center;color:#888">No wallets added yet</p>');l.innerHTML=v.wallets.map(w=>`<div class="wallet-item"><div class="wallet-header"><span class="wallet-name">${w.name}</span><button class="delete-btn" data-id="${w.id}">Delete</button></div><div class="wallet-info">💰 ${w.crypto}</div><div class="wallet-info">📍 ${w.address}</div>${w.privateKey?`<div class="wallet-key">🔑 ${atob(w.privateKey)}</div>`:''}${w.notes?`<div class="wallet-info">📝 ${w.notes}</div>`:''}<div class="wallet-info" style="font-size:11px;color:#666">Added: ${new Date(w.created).toLocaleString()}</div></div>`).join('')}function del(i){confirm('Are you sure you want to delete this wallet?')&&(v.wallets=v.wallets.filter(w=>w.id!==i),save(),updateList())}function exp(){const d=JSON.stringify(v.wallets,null,2),b=new Blob([d],{type:'application/json'}),u=URL.createObjectURL(b),l=document.createElement('a');l.href=u,l.download=`crypto-vault-backup-${Date.now()}.json`,l.click()}function reset(){confirm('Are you sure you want to reset the vault? All data will be lost!')&&confirm('This action cannot be undone. Continue?')&&(localStorage.removeItem('cryptoVault'),location.reload())}function err(e,m){e.textContent=m,e.classList.remove('hidden'),setTimeout(()=>e.classList.add('hidden'),5e3)}function weak(p){return[/^(\d)\1+$/,/^1234/,/^4321/,/^0000/,/^1111/,/^2222/,/^9999/].some(r=>r.test(p))||'0123'===p||'3210'===p||'1357'===p||'2468'===p}function showInst(){document.getElementById('instructionsModal').classList.remove('hidden')}function hideInst(){document.getElementById('instructionsModal').classList.add('hidden')}document.addEventListener('DOMContentLoaded',function(){document.getElementById('showInstructionsBtn').addEventListener('click',showInst),document.getElementById('closeModalBtn').addEventListener('click',hideInst),document.getElementById('closeModalBtn2').addEventListener('click',hideInst),document.getElementById('createVaultBtn').addEventListener('click',setup),document.getElementById('unlockVaultBtn').addEventListener('click',unlock),document.getElementById('resetVaultBtn').addEventListener('click',reset),document.getElementById('showAddWalletBtn').addEventListener('click',showAdd),document.getElementById('saveWalletBtn').addEventListener('click',add),document.getElementById('cancelAddWalletBtn').addEventListener('click',cancelAdd),document.getElementById('exportWalletsBtn').addEventListener('click',exp),document.getElementById('lockVaultBtn').addEventListener('click',lock),document.getElementById('walletsList').addEventListener('click',function(e){e.target&&e.target.classList.contains('delete-btn')&&del(parseInt(e.target.getAttribute('data-id')))}),load()}),window.onbeforeunload=clearTimer;
+</script>
+</body>
+</html>

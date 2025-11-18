@@ -139,42 +139,6 @@ body::after {
   50% { opacity: 0.6; transform: scale(1.05); }
 }
 
-/* --- CAT AD BANNER --- */
-.cat-ad {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 140, 0, 0.08);
-  border: 1.5px solid rgba(255, 140, 0, 0.25);
-  border-radius: 18px;
-  margin-bottom: 32px;
-  padding: 18px 24px;
-  box-shadow: 0 2px 12px rgba(255, 140, 0, 0.08);
-  max-width: 420px;
-  width: 100%;
-  position: relative;
-  z-index: 20;
-}
-
-.cat-img {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-right: 18px;
-  border: 2px solid #ff8c00;
-  box-shadow: 0 0 10px rgba(255, 140, 0, 0.15);
-}
-
-.cat-ad-text {
-  font-size: 16px;
-  color: #ff8c00;
-  font-weight: 500;
-  text-shadow: 0 0 8px rgba(255, 140, 0, 0.08);
-}
-
-/* --- END CAT AD --- */
-
 .container { 
   max-width: 440px; 
   width: 100%;
@@ -481,14 +445,6 @@ button:disabled {
 <div class="floating-gear gear-2"></div>
 <div class="floating-gear gear-3"></div>
 
-<!-- Cat Ad Banner -->
-<div class="cat-ad">
-  <img src="https://cataas.com/cat/says/Secure%20your%20crypto!" alt="Adorable cat" class="cat-img" />
-  <div class="cat-ad-text">
-    <strong>Meow! 🐾</strong> Even cats know: <span style="color:#ff8c00;">Crypto Vault</span> keeps your coins safe!
-  </div>
-</div>
-
 <!-- OTP Login Screen -->
 <div class="container" id="otpLogin">
   <div class="corner-bolt bolt-tl"></div>
@@ -559,8 +515,8 @@ button:disabled {
 </div>
 
 <script>
-const SERVICE_ID = "service_sddi48j";  // Your EmailJS Service ID
-const TEMPLATE_ID = "template_nrvnos9"; // Your EmailJS Template ID
+const SERVICE_ID = "YOUR_SERVICE_ID_HERE";  // Replace with your EmailJS Service ID
+const TEMPLATE_ID = "YOUR_TEMPLATE_ID_HERE"; // Replace with your EmailJS Template ID
 
 let currentEmail = '';
 let expirationTimer = null;

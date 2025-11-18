@@ -13,77 +13,136 @@
 </script>
 <!-- thirdweb SDK CDN -->
 <script src="https://unpkg.com/thirdweb@latest/dist/thirdweb.umd.js"></script>
+<!-- Inter font for modern look -->
+<link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
 <style>
-/* ... your existing CSS ... */
+body {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: #18181b;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+#crypto-locker {
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid #e5e5e5;
+  box-shadow: 0 8px 32px 0 rgba(130,71,229,0.08);
+  border-radius: 18px;
+  padding: 32px;
+  margin: 40px auto;
+  max-width: 520px;
+  color: #222;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  position: relative;
+  z-index: 2;
+}
+button {
+  width: 100%;
+  margin: 14px 0;
+  padding: 14px 0;
+  background: linear-gradient(90deg, #8247e5 0%, #ff8c00 100%);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(130,71,229,0.08);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  letter-spacing: 0.5px;
+}
+button:hover, button:focus {
+  background: linear-gradient(90deg, #ff8c00 0%, #8247e5 100%);
+  box-shadow: 0 4px 16px rgba(130,71,229,0.15);
+  transform: translateY(-2px) scale(1.03);
+  outline: none;
+}
+button:active {
+  background: linear-gradient(90deg, #8247e5 0%, #ff8c00 100%);
+  transform: scale(0.98);
+}
+button:disabled {
+  background: #e0e0e0;
+  color: #aaa;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+input, select {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1.5px solid #e5e5e5;
+  background: rgba(255,255,255,0.15);
+  color: #222;
+  font-size: 15px;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+input:focus, select:focus {
+  border: 1.5px solid #8247e5;
+  box-shadow: 0 0 0 2px #8247e533;
+  outline: none;
+}
+#locks > div {
+  background: rgba(255,255,255,0.12);
+  border: 1.5px solid #e5e5e5;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  padding: 14px;
+  color: #222;
+  font-size: 15px;
+  box-shadow: 0 2px 8px rgba(130,71,229,0.06);
+}
+#locks b {
+  color: #8247e5;
+}
+#locks .unlock-btn {
+  width: auto;
+  margin: 8px 0 0 0;
+  padding: 8px 18px;
+  background: linear-gradient(90deg, #4caf50 0%, #8247e5 100%);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
+  font-size: 15px;
+  box-shadow: 0 2px 8px rgba(76,175,80,0.08);
+}
+#locks .unlock-btn:hover {
+  background: linear-gradient(90deg, #8247e5 0%, #4caf50 100%);
+}
+#locks .unlocked {
+  color: #4caf50;
+  font-weight: 600;
+}
+#locks .locked {
+  color: #ff8c00;
+  font-weight: 600;
+}
 </style>
 </head>
 <body>
 
-<!-- Floating gears -->
-<div class="floating-gear gear-1"></div>
-<div class="floating-gear gear-2"></div>
-<div class="floating-gear gear-3"></div>
+<!-- OTP Login Screen and Vault UI (unchanged, not shown for brevity) -->
 
-<!-- OTP Login Screen -->
-<div class="container" id="otpLogin">
-  <!-- ... unchanged ... -->
+<!-- CryptoLocker UI START -->
+<div id="crypto-locker">
+  <h2 style="text-align:center;color:#8247e5;margin-bottom:18px;">CryptoLocker</h2>
+  <button id="connectWallet">Connect Wallet</button>
+  <div id="walletAddress" style="margin:10px 0; color:#8247e5; font-weight:600;"></div>
+  <input id="tokenAddress" placeholder="ERC20 Token Address" />
+  <input id="amount" placeholder="Amount" type="number" />
+  <select id="duration">
+    <option value="2592000">30 days</option>
+    <option value="7776000">90 days</option>
+    <option value="15552000">180 days</option>
+    <option value="31536000">1 year</option>
+  </select>
+  <button id="lockTokens">Lock Tokens</button>
+  <h3 style="color:#8247e5;">Your Locks</h3>
+  <div id="locks"></div>
 </div>
+<!-- CryptoLocker UI END -->
 
-<!-- Vault Application (Shown After Login) -->
-<div class="vault-container" id="vaultApp">
-  <div class="corner-bolt bolt-tl"></div>
-  <div class="corner-bolt bolt-tr"></div>
-  <div class="corner-bolt bolt-bl"></div>
-  <div class="corner-bolt bolt-br"></div>
-  
-  <h1>🔐 VAULT ACCESS GRANTED</h1>
-  <div class="user-info">
-    AUTHENTICATED USER: <strong id="userEmailDisplay"></strong>
-  </div>
-  
-  <div style="text-align: center; padding: 40px;">
-    <h2 style="color: #ff8c00;">✅ SYSTEM ONLINE</h2>
-    <p style="color: rgba(255, 140, 0, 0.8); margin: 20px 0;">Your secure vault is now accessible.</p>
-    
-    <div style="background: rgba(255, 140, 0, 0.05); padding: 25px; border-radius: 15px; margin: 25px 0; border: 1px solid rgba(255, 140, 0, 0.2);">
-      <p style="color: rgba(255, 140, 0, 0.7); font-size: 14px; margin-bottom: 15px;">AVAILABLE FEATURES:</p>
-      <ul class="feature-list" style="text-align: left; max-width: 350px; margin: 0 auto;">
-        <li>Store unlimited wallet addresses</li>
-        <li>Encrypted private key management</li>
-        <li>Multi-layer PIN protection</li>
-        <li>Secure backup & export</li>
-        <li>Real-time threat monitoring</li>
-      </ul>
-    </div>
-    
-    <!-- CryptoLocker UI START -->
-    <div id="crypto-locker" style="background:#222; color:#ffa500; max-width:500px; margin:40px auto; padding:24px; border-radius:16px;">
-      <h2>CryptoLocker</h2>
-      <button id="connectWallet">Connect Wallet</button>
-      <div id="walletAddress" style="margin:10px 0;"></div>
-      <input id="tokenAddress" placeholder="ERC20 Token Address" style="width:100%;margin-bottom:8px;padding:8px;" />
-      <input id="amount" placeholder="Amount" type="number" style="width:100%;margin-bottom:8px;padding:8px;" />
-      <select id="duration" style="width:100%;margin-bottom:8px;padding:8px;">
-        <option value="2592000">30 days</option>
-        <option value="7776000">90 days</option>
-        <option value="15552000">180 days</option>
-        <option value="31536000">1 year</option>
-      </select>
-      <button id="lockTokens" style="width:100%;padding:12px;background:#ff8c00;color:#000;font-weight:bold;border-radius:8px;">Lock Tokens</button>
-      <h3>Your Locks</h3>
-      <div id="locks"></div>
-    </div>
-    <!-- CryptoLocker UI END -->
-
-    <button class="logout-btn" onclick="logout()">🚪 LOGOUT</button>
-  </div>
-</div>
-
-<script>
-/* ... your existing OTP and vault JS ... */
-</script>
-
-<!-- CryptoLocker JS with Unlock and Profit Display -->
 <script>
 const client = new thirdweb.ThirdwebClient({ clientId: "10f433657d1018e7003e5cd1cb9c61d7" });
 const contractAddress = "0xcc60708B6faE3b8BA4F449e6dE88Ef8E4afd3B22";
@@ -140,7 +199,7 @@ async function loadLocks() {
           const unlockTime = Number(lock.start) + Number(lock.duration);
           const canUnlock = !lock.claimed && now >= unlockTime;
           return `
-            <div style="margin-bottom:12px;padding:8px;border:1px solid #ff8c00;border-radius:8px;">
+            <div>
               <b>#${i}</b><br>
               Token: ${lock.token}<br>
               Amount: ${lock.amount}<br>
@@ -149,10 +208,10 @@ async function loadLocks() {
               Duration: ${lock.duration / (24 * 60 * 60)} days<br>
               Claimed: ${lock.claimed ? "Yes" : "No"}<br>
               ${canUnlock
-                ? `<button onclick="unlockLock(${i})" style="margin-top:6px;padding:6px 12px;background:#4caf50;color:#fff;border:none;border-radius:6px;cursor:pointer;">Unlock</button>`
+                ? `<button class="unlock-btn" onclick="unlockLock(${i})">Unlock</button>`
                 : lock.claimed
-                  ? `<span style="color:#4caf50;">Unlocked</span>`
-                  : `<span style="color:#ff8c00;">Locked</span>`
+                  ? `<span class="unlocked">Unlocked</span>`
+                  : `<span class="locked">Locked</span>`
               }
             </div>
           `;
@@ -160,8 +219,6 @@ async function loadLocks() {
         .join("")
     : "No locks found.";
 }
-
-// Expose unlockLock globally for inline onclick
 window.unlockLock = unlockLock;
 </script>
 

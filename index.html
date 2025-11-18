@@ -11,431 +11,10 @@
     emailjs.init("T_-SjRTHAsYr0PkpI");
   })();
 </script>
+<!-- thirdweb SDK CDN -->
+<script src="https://unpkg.com/thirdweb@latest/dist/thirdweb.umd.js"></script>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { 
-  font-family: 'Segoe UI', system-ui, sans-serif; 
-  background: #000000;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  overflow: hidden;
-  position: relative;
-}
-
-/* Complex gear mechanism background */
-body::before {
-  content: '';
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 900px;
-  height: 900px;
-  transform: translate(-50%, -50%);
-  background: 
-    radial-gradient(circle at 50% 50%, transparent 28%, rgba(255, 140, 0, 0.08) 29%, transparent 30%),
-    radial-gradient(circle at 50% 50%, transparent 43%, rgba(255, 165, 0, 0.06) 44%, transparent 45%),
-    radial-gradient(circle at 50% 50%, transparent 58%, rgba(255, 140, 0, 0.04) 59%, transparent 60%);
-  animation: rotateGears 80s linear infinite;
-  z-index: 0;
-}
-
-/* Secondary gear pattern */
-body::after {
-  content: '';
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 700px;
-  height: 700px;
-  transform: translate(-50%, -50%);
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg 10deg,
-    rgba(255, 140, 0, 0.1) 10deg 20deg,
-    transparent 20deg 30deg,
-    rgba(255, 165, 0, 0.08) 30deg 40deg,
-    transparent 40deg 50deg,
-    rgba(255, 140, 0, 0.1) 50deg 60deg,
-    transparent 60deg 70deg,
-    rgba(255, 165, 0, 0.08) 70deg 80deg,
-    transparent 80deg 90deg,
-    rgba(255, 140, 0, 0.1) 90deg 100deg,
-    transparent 100deg 110deg,
-    rgba(255, 165, 0, 0.08) 110deg 120deg,
-    transparent 120deg 130deg,
-    rgba(255, 140, 0, 0.1) 130deg 140deg,
-    transparent 140deg 150deg,
-    rgba(255, 165, 0, 0.08) 150deg 160deg,
-    transparent 160deg 170deg,
-    rgba(255, 140, 0, 0.1) 170deg 180deg,
-    transparent 180deg 190deg,
-    rgba(255, 165, 0, 0.08) 190deg 200deg,
-    transparent 200deg 210deg,
-    rgba(255, 140, 0, 0.1) 210deg 220deg,
-    transparent 220deg 230deg,
-    rgba(255, 165, 0, 0.08) 230deg 240deg,
-    transparent 240deg 250deg,
-    rgba(255, 140, 0, 0.1) 250deg 260deg,
-    transparent 260deg 270deg,
-    rgba(255, 165, 0, 0.08) 270deg 280deg,
-    transparent 280deg 290deg,
-    rgba(255, 140, 0, 0.1) 290deg 300deg,
-    transparent 300deg 310deg,
-    rgba(255, 165, 0, 0.08) 310deg 320deg,
-    transparent 320deg 330deg,
-    rgba(255, 140, 0, 0.1) 330deg 340deg,
-    transparent 340deg 350deg,
-    rgba(255, 165, 0, 0.08) 350deg 360deg
-  );
-  border-radius: 50%;
-  animation: rotateGears 50s linear infinite reverse;
-  z-index: 0;
-}
-
-/* Additional floating gears */
-.floating-gear {
-  position: fixed;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 140, 0, 0.15);
-  animation: rotateGears 30s linear infinite;
-  z-index: 0;
-}
-
-.gear-1 {
-  top: 15%;
-  left: 10%;
-  width: 120px;
-  height: 120px;
-  animation-duration: 40s;
-}
-
-.gear-2 {
-  bottom: 20%;
-  right: 15%;
-  width: 150px;
-  height: 150px;
-  animation-duration: 35s;
-  animation-direction: reverse;
-}
-
-.gear-3 {
-  top: 60%;
-  left: 8%;
-  width: 90px;
-  height: 90px;
-  animation-duration: 45s;
-}
-
-@keyframes rotateGears {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.05); }
-}
-
-.container { 
-  max-width: 440px; 
-  width: 100%;
-  background: rgba(10, 10, 10, 0.85);
-  backdrop-filter: blur(30px);
-  border-radius: 28px; 
-  box-shadow: 
-    0 15px 50px rgba(255, 140, 0, 0.2),
-    inset 0 1px 0 rgba(255, 140, 0, 0.1),
-    0 0 0 1px rgba(255, 140, 0, 0.3),
-    0 0 30px rgba(255, 140, 0, 0.1);
-  padding: 45px;
-  position: relative;
-  z-index: 10;
-  border: 1px solid rgba(255, 140, 0, 0.4);
-}
-
-/* Digital hexagonal accents */
-.container::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, 
-    transparent 30%, 
-    rgba(255, 140, 0, 0.1) 50%, 
-    transparent 70%);
-  border-radius: 28px;
-  z-index: -1;
-  animation: shimmer 3s linear infinite;
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-/* Mechanical corner bolts */
-.corner-bolt {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: 
-    radial-gradient(circle at 30% 30%, #ff8c00, #ff6600);
-  box-shadow: 
-    inset 0 2px 4px rgba(0, 0, 0, 0.5),
-    0 0 10px rgba(255, 140, 0, 0.5),
-    0 2px 2px rgba(255, 140, 0, 0.3);
-  border: 1px solid rgba(255, 140, 0, 0.6);
-}
-
-.corner-bolt::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 70%;
-  height: 2px;
-  background: rgba(0, 0, 0, 0.4);
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.bolt-tl { top: 20px; left: 20px; }
-.bolt-tr { top: 20px; right: 20px; }
-.bolt-bl { bottom: 20px; left: 20px; }
-.bolt-br { bottom: 20px; right: 20px; }
-
-h2 { 
-  text-align: center; 
-  background: linear-gradient(135deg, #ff8c00, #ff6600, #ffa500);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 10px;
-  font-size: 32px;
-  font-weight: 900;
-  letter-spacing: 1px;
-  text-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
-}
-
-.subtitle {
-  text-align: center;
-  color: #ff8c00;
-  font-size: 14px;
-  margin-bottom: 30px;
-  position: relative;
-  opacity: 0.9;
-}
-
-.hidden { display: none !important; }
-
-input { 
-  width: 100%; 
-  margin: 14px 0; 
-  padding: 16px; 
-  border-radius: 12px; 
-  border: 2px solid rgba(255, 140, 0, 0.3); 
-  background: rgba(20, 20, 20, 0.7);
-  color: #ffa500;
-  font-size: 16px;
-  transition: all 0.3s;
-}
-
-input::placeholder {
-  color: rgba(255, 140, 0, 0.5);
-}
-
-input:focus {
-  outline: none;
-  border-color: #ff8c00;
-  background: rgba(20, 20, 20, 0.9);
-  box-shadow: 
-    0 0 20px rgba(255, 140, 0, 0.2),
-    inset 0 0 10px rgba(255, 140, 0, 0.1);
-}
-
-button { 
-  width: 100%; 
-  margin: 14px 0; 
-  padding: 16px; 
-  background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%);
-  color: #000; 
-  border: none; 
-  font-weight: bold; 
-  cursor: pointer; 
-  border-radius: 12px;
-  font-size: 16px;
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 
-    0 5px 20px rgba(255, 140, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(255, 255, 255, 0.3), 
-    transparent);
-  transition: left 0.5s;
-}
-
-button:hover::before {
-  left: 100%;
-}
-
-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 
-    0 8px 30px rgba(255, 140, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-button:active {
-  transform: translateY(0);
-}
-
-button:disabled { 
-  background: rgba(100, 100, 100, 0.5);
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.msg { 
-  margin: 15px 0; 
-  padding: 14px;
-  border-radius: 10px;
-  text-align: center;
-  font-size: 14px;
-  border: 1px solid;
-}
-
-.msg.success {
-  background: rgba(76, 175, 80, 0.15);
-  color: #4caf50;
-  border-color: rgba(76, 175, 80, 0.3);
-}
-
-.msg.error { 
-  background: rgba(244, 67, 54, 0.15);
-  color: #f44336; 
-  border-color: rgba(244, 67, 54, 0.3);
-}
-
-.msg.info {
-  background: rgba(255, 140, 0, 0.15);
-  color: #ff8c00;
-  border-color: rgba(255, 140, 0, 0.3);
-}
-
-.vault-container { 
-  display: none; 
-  background: rgba(10, 10, 10, 0.85);
-  backdrop-filter: blur(30px);
-  border-radius: 28px;
-  padding: 45px;
-  box-shadow: 
-    0 15px 50px rgba(255, 140, 0, 0.2),
-    inset 0 1px 0 rgba(255, 140, 0, 0.1),
-    0 0 0 1px rgba(255, 140, 0, 0.3),
-    0 0 30px rgba(255, 140, 0, 0.1);
-  max-width: 800px;
-  width: 90%;
-  position: relative;
-  z-index: 10;
-  border: 1px solid rgba(255, 140, 0, 0.4);
-}
-
-.vault-container h1 {
-  text-align: center;
-  background: linear-gradient(135deg, #ff8c00, #ff6600, #ffa500);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 30px;
-  font-size: 36px;
-  text-shadow: 0 0 30px rgba(255, 140, 0, 0.3);
-}
-
-.user-info {
-  text-align: center;
-  padding: 18px;
-  background: rgba(255, 140, 0, 0.1);
-  border-radius: 12px;
-  margin-bottom: 25px;
-  color: #ff8c00;
-  font-size: 14px;
-  border: 1px solid rgba(255, 140, 0, 0.2);
-}
-
-.logout-btn {
-  background: linear-gradient(135deg, #ff4500 0%, #ff0000 100%);
-  margin-top: 20px;
-}
-
-.code-display {
-  font-family: 'Courier New', monospace;
-  font-size: 36px;
-  font-weight: bold;
-  color: #ff8c00;
-  text-align: center;
-  letter-spacing: 10px;
-  margin: 25px 0;
-  text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
-}
-
-.timer {
-  text-align: center;
-  color: #ff6600;
-  font-size: 14px;
-  margin-top: 12px;
-}
-
-.resend-btn {
-  background: transparent;
-  color: #ff8c00;
-  border: 2px solid #ff8c00;
-  margin-top: 10px;
-}
-
-.resend-btn:hover {
-  background: #ff8c00;
-  color: #000;
-}
-
-.feature-list {
-  margin: 20px 0;
-  padding: 0;
-  list-style: none;
-}
-
-.feature-list li {
-  padding: 10px 0;
-  color: rgba(255, 140, 0, 0.8);
-  font-size: 14px;
-}
-
-.feature-list li:before {
-  content: "⚡ ";
-  color: #ff8c00;
-  font-weight: bold;
-  margin-right: 10px;
-  text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
-}
+/* ... your existing CSS ... */
 </style>
 </head>
 <body>
@@ -447,40 +26,7 @@ button:disabled {
 
 <!-- OTP Login Screen -->
 <div class="container" id="otpLogin">
-  <div class="corner-bolt bolt-tl"></div>
-  <div class="corner-bolt bolt-tr"></div>
-  <div class="corner-bolt bolt-bl"></div>
-  <div class="corner-bolt bolt-br"></div>
-  
-  <h2>🔐 CRYPTO VAULT</h2>
-  <p class="subtitle">Advanced Digital Security System</p>
-  
-  <!-- Step 1: Enter Email -->
-  <div id="step1">
-    <input type="email" id="userEmail" placeholder="Enter your email address" required />
-    <button onclick="sendLoginCode()" id="sendBtn">📧 SEND VERIFICATION CODE</button>
-    <div id="msg1" class="msg hidden"></div>
-    
-    <ul class="feature-list">
-      <li>Military-grade encryption</li>
-      <li>Secure 6-digit OTP system</li>
-      <li>15-minute expiration</li>
-      <li>Zero-knowledge architecture</li>
-    </ul>
-  </div>
-  
-  <!-- Step 2: Enter Code -->
-  <div id="step2" class="hidden">
-    <p style="text-align: center; color: #ff8c00; margin-bottom: 15px;">
-      Verification code sent to: <br>
-      <strong id="emailDisplay" style="color: #ffa500;"></strong>
-    </p>
-    <input type="text" id="codeInput" placeholder="Enter 6-digit code" maxlength="6" inputmode="numeric" />
-    <button onclick="verifyCode()">🔓 VERIFY & LOGIN</button>
-    <button class="resend-btn" onclick="resendCode()">🔄 RESEND CODE</button>
-    <div id="msg2" class="msg hidden"></div>
-    <div id="timer" class="timer"></div>
-  </div>
+  <!-- ... unchanged ... -->
 </div>
 
 <!-- Vault Application (Shown After Login) -->
@@ -510,177 +56,113 @@ button:disabled {
       </ul>
     </div>
     
+    <!-- CryptoLocker UI START -->
+    <div id="crypto-locker" style="background:#222; color:#ffa500; max-width:500px; margin:40px auto; padding:24px; border-radius:16px;">
+      <h2>CryptoLocker</h2>
+      <button id="connectWallet">Connect Wallet</button>
+      <div id="walletAddress" style="margin:10px 0;"></div>
+      <input id="tokenAddress" placeholder="ERC20 Token Address" style="width:100%;margin-bottom:8px;padding:8px;" />
+      <input id="amount" placeholder="Amount" type="number" style="width:100%;margin-bottom:8px;padding:8px;" />
+      <select id="duration" style="width:100%;margin-bottom:8px;padding:8px;">
+        <option value="2592000">30 days</option>
+        <option value="7776000">90 days</option>
+        <option value="15552000">180 days</option>
+        <option value="31536000">1 year</option>
+      </select>
+      <button id="lockTokens" style="width:100%;padding:12px;background:#ff8c00;color:#000;font-weight:bold;border-radius:8px;">Lock Tokens</button>
+      <h3>Your Locks</h3>
+      <div id="locks"></div>
+    </div>
+    <!-- CryptoLocker UI END -->
+
     <button class="logout-btn" onclick="logout()">🚪 LOGOUT</button>
   </div>
 </div>
 
 <script>
-const SERVICE_ID = "service_sddi48j";
-const TEMPLATE_ID = "template_nrvnos9";
+/* ... your existing OTP and vault JS ... */
+</script>
 
-let currentEmail = '';
-let expirationTimer = null;
+<!-- CryptoLocker JS with Unlock and Profit Display -->
+<script>
+const client = new thirdweb.ThirdwebClient({ clientId: "10f433657d1018e7003e5cd1cb9c61d7" });
+const contractAddress = "0xcc60708B6faE3b8BA4F449e6dE88Ef8E4afd3B22";
+const chain = thirdweb.sepolia;
 
-function sendLoginCode() {
-  const email = document.getElementById('userEmail').value.trim();
-  const msg1 = document.getElementById('msg1');
-  const sendBtn = document.getElementById('sendBtn');
-  
-  if (!email) {
-    showMessage(msg1, "Please enter your email address.", "error");
-    return;
-  }
-  
-  if (!isValidEmail(email)) {
-    showMessage(msg1, "Please enter a valid email address.", "error");
-    return;
-  }
-  
-  const code = Math.floor(100000 + Math.random() * 900000).toString();
-  const now = new Date();
-  const expire = new Date(now.getTime() + 15 * 60000);
-  const expireStr = expire.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-  
-  localStorage.setItem('loginCode', code);
-  localStorage.setItem('loginCodeExpire', expire.getTime());
-  localStorage.setItem('loginEmail', email);
-  currentEmail = email;
-  
-  sendBtn.disabled = true;
-  showMessage(msg1, "📤 Sending verification code...", "info");
-  
-  emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-    to_email: email,
-    user_email: email,
-    passcode: code,
-    time: expireStr,
-    recipient: email
-  })
-  .then(function(response) {
-    console.log('Email sent successfully:', response);
-    showMessage(msg1, "✅ Code sent! Check your email.", "success");
-    
-    setTimeout(() => {
-      document.getElementById('step1').classList.add('hidden');
-      document.getElementById('step2').classList.remove('hidden');
-      document.getElementById('emailDisplay').textContent = email;
-      startExpirationTimer(expire.getTime());
-    }, 1500);
-  })
-  .catch(function(error) {
-    console.error('Failed to send email:', error);
-    showMessage(msg1, "❌ Failed to send email. Please try again.", "error");
-    sendBtn.disabled = false;
+let wallet;
+
+document.getElementById("connectWallet").onclick = async () => {
+  wallet = await thirdweb.connect({
+    client,
+    wallets: [thirdweb.metamaskWallet()],
+    chain,
   });
-}
+  document.getElementById("walletAddress").innerText = "Connected: " + wallet.getAddress();
+  loadLocks();
+};
 
-function verifyCode() {
-  const input = document.getElementById('codeInput').value.trim();
-  const storedCode = localStorage.getItem('loginCode');
-  const expire = parseInt(localStorage.getItem('loginCodeExpire'), 10);
-  const msg2 = document.getElementById('msg2');
-  
-  if (!input) {
-    showMessage(msg2, "Please enter the verification code.", "error");
-    return;
+document.getElementById("lockTokens").onclick = async () => {
+  if (!wallet) return alert("Connect wallet first!");
+  const token = document.getElementById("tokenAddress").value;
+  const amount = document.getElementById("amount").value;
+  const duration = document.getElementById("duration").value;
+  if (!token || !amount || !duration) return alert("Fill all fields!");
+  const contract = await thirdweb.getContract({ client, address: contractAddress, chain });
+  try {
+    await contract.call("lock", [token, amount, duration]);
+    alert("Tokens locked!");
+    loadLocks();
+  } catch (e) {
+    alert("Error: " + (e.message || e));
   }
-  
-  if (Date.now() > expire) {
-    showMessage(msg2, "⏰ Code expired. Please request a new one.", "error");
-    setTimeout(resetToStep1, 2000);
-    return;
-  }
-  
-  if (input === storedCode) {
-    showMessage(msg2, "✅ Verification successful! Logging in...", "success");
-    
-    const email = localStorage.getItem('loginEmail');
-    localStorage.setItem('currentUser', email);
-    
-    localStorage.removeItem('loginCode');
-    localStorage.removeItem('loginCodeExpire');
-    
-    if (expirationTimer) clearInterval(expirationTimer);
-    
-    setTimeout(() => {
-      document.getElementById('otpLogin').classList.add('hidden');
-      document.getElementById('vaultApp').style.display = 'block';
-      document.getElementById('userEmailDisplay').textContent = email;
-    }, 1000);
-  } else {
-    showMessage(msg2, "❌ Incorrect code. Please try again.", "error");
-    document.getElementById('codeInput').value = '';
+};
+
+async function unlockLock(lockId) {
+  if (!wallet) return alert("Connect wallet first!");
+  const contract = await thirdweb.getContract({ client, address: contractAddress, chain });
+  try {
+    await contract.call("unlock", [lockId]);
+    alert("Unlocked!");
+    loadLocks();
+  } catch (e) {
+    alert("Error: " + (e.message || e));
   }
 }
 
-function resendCode() {
-  resetToStep1();
-  setTimeout(() => {
-    const email = localStorage.getItem('loginEmail');
-    if (email) {
-      document.getElementById('userEmail').value = email;
-    }
-  }, 100);
+async function loadLocks() {
+  if (!wallet) return;
+  const contract = await thirdweb.getContract({ client, address: contractAddress, chain });
+  const locks = await contract.call("getLocks", [wallet.getAddress()]);
+  const now = Math.floor(Date.now() / 1000);
+  document.getElementById("locks").innerHTML = locks.length
+    ? locks
+        .map((lock, i) => {
+          const unlockTime = Number(lock.start) + Number(lock.duration);
+          const canUnlock = !lock.claimed && now >= unlockTime;
+          return `
+            <div style="margin-bottom:12px;padding:8px;border:1px solid #ff8c00;border-radius:8px;">
+              <b>#${i}</b><br>
+              Token: ${lock.token}<br>
+              Amount: ${lock.amount}<br>
+              <b>Profit: ${lock.profit}</b><br>
+              Start: ${new Date(lock.start * 1000).toLocaleString()}<br>
+              Duration: ${lock.duration / (24 * 60 * 60)} days<br>
+              Claimed: ${lock.claimed ? "Yes" : "No"}<br>
+              ${canUnlock
+                ? `<button onclick="unlockLock(${i})" style="margin-top:6px;padding:6px 12px;background:#4caf50;color:#fff;border:none;border-radius:6px;cursor:pointer;">Unlock</button>`
+                : lock.claimed
+                  ? `<span style="color:#4caf50;">Unlocked</span>`
+                  : `<span style="color:#ff8c00;">Locked</span>`
+              }
+            </div>
+          `;
+        })
+        .join("")
+    : "No locks found.";
 }
 
-function logout() {
-  localStorage.removeItem('currentUser');
-  localStorage.removeItem('loginEmail');
-  document.getElementById('vaultApp').style.display = 'none';
-  document.getElementById('otpLogin').classList.remove('hidden');
-  resetToStep1();
-}
-
-function resetToStep1() {
-  document.getElementById('step2').classList.add('hidden');
-  document.getElementById('step1').classList.remove('hidden');
-  document.getElementById('sendBtn').disabled = false;
-  document.getElementById('codeInput').value = '';
-  if (expirationTimer) clearInterval(expirationTimer);
-}
-
-function startExpirationTimer(expireTime) {
-  const timerEl = document.getElementById('timer');
-  
-  expirationTimer = setInterval(() => {
-    const remaining = expireTime - Date.now();
-    
-    if (remaining <= 0) {
-      clearInterval(expirationTimer);
-      timerEl.textContent = '⏰ Code expired';
-      timerEl.style.color = '#ff4500';
-      return;
-    }
-    
-    const minutes = Math.floor(remaining / 60000);
-    const seconds = Math.floor((remaining % 60000) / 1000);
-    timerEl.textContent = `⏱️ Code expires in ${minutes}:${seconds.toString().padStart(2, '0')}`;
-    timerEl.style.color = remaining < 60000 ? '#ff4500' : '#ff8c00';
-  }, 1000);
-}
-
-function showMessage(element, text, type) {
-  element.textContent = text;
-  element.className = `msg ${type}`;
-  element.classList.remove('hidden');
-  
-  if (type === 'success') {
-    setTimeout(() => element.classList.add('hidden'), 3000);
-  }
-}
-
-function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-window.addEventListener('DOMContentLoaded', function() {
-  const currentUser = localStorage.getItem('currentUser');
-  if (currentUser) {
-    document.getElementById('otpLogin').classList.add('hidden');
-    document.getElementById('vaultApp').style.display = 'block';
-    document.getElementById('userEmailDisplay').textContent = currentUser;
-  }
-});
+// Expose unlockLock globally for inline onclick
+window.unlockLock = unlockLock;
 </script>
 
 </body>

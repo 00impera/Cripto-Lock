@@ -1,1286 +1,276 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Crypto Vault - Zora Style</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.10.0/web3.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Space Grotesk', sans-serif;
-  background: #000000;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  color: #ffffff;
-}
-
-#crypto-locker {
-  background: #111111;
-  border: 2px solid #333333;
-  border-radius: 24px;
-  padding: 40px;
-  width: 100%;
-  max-width: 700px;
-  position: relative;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-}
-
-h2 {
-  text-align: center;
-  color: #ffffff;
-  margin-bottom: 30px;
-  font-size: 40px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-h3 {
-  color: #ffffff;
-  font-size: 22px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin: 30px 0 20px 0;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #333333;
-}
-
-/* Zora-style Clock Display */
-#horologicDisplay {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 16px;
-  padding: 30px;
-  margin-bottom: 30px;
-  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-#horologicDisplay::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  animation: shimmer 3s linear infinite;
-}
-
-@keyframes shimmer {
-  to { left: 100%; }
-}
-
-#digitalClock {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  position: relative;
-  z-index: 1;
-}
-
-#timeDisplay {
-  font-size: 64px;
-  font-weight: 700;
-  color: #ffffff;
-  text-align: center;
-  letter-spacing: 4px;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  line-height: 1;
-}
-
-#dateDisplay {
-  font-size: 18px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
-  text-align: center;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-#blockchainTime {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  font-size: 13px;
-  margin-top: 15px;
-  backdrop-filter: blur(10px);
-}
-
-#blockchainTime span:first-child {
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-
-#blockTime {
-  color: rgba(255, 255, 255, 0.8);
-  font-family: monospace;
-  font-size: 12px;
-}
-
-.explorer-links {
-  text-align: center;
-  margin-bottom: 25px;
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-/* Zora-style Buttons */
-button {
-  width: 100%;
-  margin: 12px 0;
-  padding: 18px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #ffffff;
-  border: none;
-  font-weight: 600;
-  font-size: 16px;
-  font-family: 'Space Grotesk', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-  position: relative;
-  overflow: hidden;
-}
-
-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s;
-}
-
-button:hover::before {
-  left: 100%;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
-}
-
-button:active {
-  transform: translateY(0);
-}
-
-button:disabled {
-  background: #333333;
-  color: #666666;
-  cursor: not-allowed;
-  box-shadow: none;
-  opacity: 0.5;
-}
-
-.explorer-btn {
-  width: auto !important;
-  padding: 12px 24px !important;
-  font-size: 14px !important;
-  margin: 0 !important;
-  background: #222222 !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
-}
-
-.explorer-btn:hover {
-  background: #333333 !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
-}
-
-/* Input Fields */
-input, select {
-  width: 100%;
-  margin-bottom: 18px;
-  padding: 16px;
-  border-radius: 12px;
-  border: 2px solid #333333;
-  background: #1a1a1a;
-  color: #ffffff;
-  font-size: 15px;
-  font-family: 'Space Grotesk', sans-serif;
-  transition: all 0.3s;
-}
-
-input::placeholder {
-  color: #666666;
-}
-
-input:focus, select:focus {
-  border: 2px solid #667eea;
-  background: #222222;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-select {
-  cursor: pointer;
-}
-
-select option {
-  background: #1a1a1a;
-  color: #ffffff;
-  padding: 10px;
-}
-
-#walletAddress {
-  margin: 18px 0;
-  padding: 16px;
-  background: #1a1a1a;
-  border: 2px solid #333333;
-  border-radius: 12px;
-  color: #ffffff;
-  font-weight: 600;
-  text-align: center;
-  font-size: 14px;
-  word-break: break-all;
-}
-
-#status {
-  margin: 15px 0;
-  padding: 14px;
-  background: #1a1a1a;
-  border: 2px solid #333333;
-  border-radius: 12px;
-  color: #ffffff;
-  text-align: center;
-  font-size: 14px;
-  display: none;
-}
-
-#status.show {
-  display: block;
-  animation: slideIn 0.3s ease;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-#status.success {
-  border-color: #10b981;
-  background: rgba(16, 185, 129, 0.1);
-  color: #10b981;
-}
-
-#status.error {
-  border-color: #ef4444;
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-}
-
-/* Lock Display */
-#locks > div {
-  background: #1a1a1a;
-  border: 2px solid #333333;
-  border-radius: 12px;
-  margin-bottom: 18px;
-  padding: 20px;
-  color: #ffffff;
-  font-size: 14px;
-  transition: all 0.3s;
-}
-
-#locks > div:hover {
-  border-color: #667eea;
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
-  transform: translateY(-2px);
-}
-
-#locks b {
-  color: #ffffff;
-  font-weight: 600;
-}
-
-#locks .unlock-btn {
-  width: auto;
-  margin: 12px 8px 0 0;
-  padding: 12px 24px;
-  font-size: 14px;
-  display: inline-block;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-}
-
-#locks .unlock-btn:hover {
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-}
-
-#locks .explorer-btn {
-  margin-top: 12px !important;
-}
-
-#locks .unlocked {
-  color: #10b981;
-  font-weight: 600;
-}
-
-#locks .locked {
-  color: #ef4444;
-  font-weight: 600;
-}
-
-.status-indicator {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-right: 10px;
-  animation: pulse 2s infinite;
-}
-
-.status-locked {
-  background: #ef4444;
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
-}
-
-.status-unlocked {
-  background: #10b981;
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-.step-label {
-  display: inline-block;
-  padding: 4px 10px;
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  margin-right: 8px;
-}
-
-.loading {
-  pointer-events: none;
-  opacity: 0.7;
-}
-
-.loading::after {
-  content: '';
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: translateY(-50%) rotate(360deg); }
-}
-
-/* DeFi Integrations */
-#defiIntegrations {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-  margin-top: 15px;
-}
-
-.defi-btn {
-  width: 100% !important;
-  padding: 14px !important;
-  margin: 0 !important;
-  font-size: 13px !important;
-  text-align: center;
-  background: #222222 !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
-}
-
-.defi-btn:hover {
-  background: #333333 !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
-}
-
-.network-badge {
-  display: inline-block;
-  padding: 6px 14px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #ffffff;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-left: 10px;
-  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
-}
-
-.balance-display {
-  font-size: 13px;
-  color: #999999;
-  margin-top: -12px;
-  margin-bottom: 12px;
-  text-align: right;
-}
-
-/* Modal */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(5px);
-}
-
-.modal.show {
-  display: flex;
-}
-
-.modal-content {
-  background: #111111;
-  border: 2px solid #333333;
-  border-radius: 24px;
-  padding: 40px;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-}
-
-.modal-buttons {
-  display: flex;
-  gap: 12px;
-  margin-top: 25px;
-}
-
-.modal-buttons button {
-  flex: 1;
-  margin: 0;
-}
-
-@media (max-width: 768px) {
-  h2 {
-    font-size: 32px;
-  }
-  
-  #timeDisplay {
-    font-size: 48px;
-  }
-  
-  #defiIntegrations {
-    grid-template-columns: 1fr;
-  }
-  
-  #crypto-locker {
-    padding: 30px 20px;
-  }
-}
-</style>
-</head>
-<body>
-
-<div id="crypto-locker">
-  <h2>⬢ CRYPTOLOCKER <span class="network-badge">MAINNET</span></h2>
-  
-  <!-- Digital Clock -->
-  <div id="horologicDisplay">
-    <div id="digitalClock">
-      <div id="timeDisplay">00:00:00</div>
-      <div id="dateDisplay">LOADING...</div>
-    </div>
-    <div id="blockchainTime">
-      <span>⛓ BLOCKCHAIN TIME</span>
-      <span id="blockTime">Loading...</span>
-    </div>
-  </div>
-  
-  <div class="explorer-links">
-    <button class="explorer-btn" onclick="window.open('https://etherscan.io/address/0x82ecB5c11Eda49f8E77e8617C360A5645F8612D1', '_blank')">
-      📊 VIEW ON ETHERSCAN
-    </button>
-  </div>
-  
-  <button id="connectWallet">🔗 CONNECT WALLET</button>
-  
-  <div id="walletAddress"></div>
-  <div id="status"></div>
-  
-  <input id="tokenAddress" placeholder="Token Contract Address (0x...)" />
-  <div class="balance-display" id="tokenBalance"></div>
-  
-  <input id="amount" placeholder="Amount (e.g., 1 for 1 token)" type="text" />
-  <div class="balance-display" id="ethBalance"></div>
-  
-  <select id="duration">
-    <option value="2592000">⏱ 30 Days (Minimum)</option>
-    <option value="7776000">⏱ 90 Days</option>
-    <option value="15552000">⏱ 180 Days</option>
-    <option value="31536000">⏱ 1 Year</option>
-  </select>
-  
-  <h3>🔒 Locking Options</h3>
-  
-  <button id="approveTokens"><span class="step-label">STEP 1</span>✅ Approve Tokens</button>
-  <button id="lockTokens"><span class="step-label">STEP 2</span>🔒 Lock Tokens</button>
-  
-  <h3>⚡ Advanced Options</h3>
-  
-  <button id="lockWithSwap">🔄 Swap & Lock (Uniswap)</button>
-  <button id="gaslessSwap" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">⚡ Gas-Free Swap & Lock</button>
-  <button id="lockWithYield">📈 Lock with Yield (Aave)</button>
-  <button id="lockLPTokens">💧 Lock LP Tokens (1.5x Profit)</button>
-  
-  <h3>📋 Your Locks</h3>
-  <div id="locks">Connect wallet to view your locks...</div>
-  
-  <h3>🌐 DeFi Integrations</h3>
-  <div id="defiIntegrations">
-    <button class="defi-btn" onclick="window.open('https://app.uniswap.org', '_blank')">
-      🦄 Uniswap
-    </button>
-    <button class="defi-btn" onclick="window.open('https://app.aave.com', '_blank')">
-      👻 Aave
-    </button>
-    <button class="defi-btn" onclick="window.open('https://compound.finance', '_blank')">
-      🏦 Compound
-    </button>
-    <button class="defi-btn" onclick="window.open('https://curve.fi', '_blank')">
-      📈 Curve
-    </button>
-  </div>
-</div>
-
-<!-- Confirmation Modal -->
-<div id="confirmModal" class="modal">
-  <div class="modal-content">
-    <h3 style="margin-top: 0;">⚠️ Confirm Transaction</h3>
-    <p id="modalMessage" style="color: #999999; margin: 20px 0;"></p>
-    <div class="modal-buttons">
-      <button onclick="cancelTransaction()" style="background: #333333 !important; box-shadow: none !important;">❌ Cancel</button>
-      <button onclick="confirmTransaction()">✅ Confirm</button>
-    </div>
-  </div>
-</div>
-
-<script>
-let wallet = null;
-let web3 = null;
-let contractAddress = "0x82ecB5c11Eda49f8E77e8617C360A5645F8612D1";
-let pendingTransaction = null;
-let tokenDecimals = 18;
-
-const ERC20_ABI = [
-  {"constant": true, "inputs": [{"name": "_owner", "type": "address"}], "name": "balanceOf", "outputs": [{"name": "balance", "type": "uint256"}], "type": "function"},
-  {"constant": true, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}], "type": "function"},
-  {"constant": true, "inputs": [], "name": "symbol", "outputs": [{"name": "", "type": "string"}], "type": "function"},
-  {"constant": false, "inputs": [{"name": "_spender", "type": "address"}, {"name": "_value", "type": "uint256"}], "name": "approve", "outputs": [{"name": "", "type": "bool"}], "type": "function"},
-  {"constant": true, "inputs": [{"name": "_owner", "type": "address"}, {"name": "_spender", "type": "address"}], "name": "allowance", "outputs": [{"name": "", "type": "uint256"}], "type": "function"}
-];
-
+import React, { useState, useEffect } from "react";
+import {
+  ThirdwebProvider,
+  ConnectButton,
+  useActiveAccount,
+  useActiveWallet,
+  useChain,
+  useReadContract,
+  useSendTransaction,
+  TransactionButton,
+} from "thirdweb/react";
+import { getContract } from "thirdweb";
+import { erc20 } from "thirdweb/extensions";
+import { ethereum } from "thirdweb/chains";
+
+// Replace with your actual contract addresses
+const LOCKER_CONTRACT = "0x82ecB5c11Eda49f8E77e8617C360A5645F8612D1";
 const LOCKER_ABI = [
-  // Core Functions
-  {"constant": false, "inputs": [{"name": "token", "type": "address"}, {"name": "amount", "type": "uint256"}, {"name": "duration", "type": "uint256"}], "name": "lock", "outputs": [], "type": "function"},
-  {"constant": false, "inputs": [{"name": "lockId", "type": "uint256"}], "name": "unlock", "outputs": [], "type": "function"},
-  {"constant": false, "inputs": [{"name": "lockId", "type": "uint256"}], "name": "emergencyUnlock", "outputs": [], "type": "function"},
-  
-  // DeFi Functions
-  {"constant": false, "inputs": [{"name": "tokenIn", "type": "address"}, {"name": "tokenOut", "type": "address"}, {"name": "amountIn", "type": "uint256"}, {"name": "amountOutMin", "type": "uint256"}, {"name": "path", "type": "address[]"}, {"name": "duration", "type": "uint256"}, {"name": "deadline", "type": "uint256"}], "name": "swapAndLock", "outputs": [], "type": "function"},
-  {"constant": false, "inputs": [{"name": "token", "type": "address"}, {"name": "amount", "type": "uint256"}, {"name": "duration", "type": "uint256"}], "name": "lockWithYield", "outputs": [], "type": "function"},
-  {"constant": false, "inputs": [{"name": "lockId", "type": "uint256"}], "name": "claimYield", "outputs": [], "type": "function"},
-  {"constant": false, "inputs": [{"name": "lpToken", "type": "address"}, {"name": "amount", "type": "uint256"}, {"name": "duration", "type": "uint256"}], "name": "lockLPTokens", "outputs": [], "type": "function"},
-  
-  // View Functions
-  {"constant": true, "inputs": [{"name": "user", "type": "address"}], "name": "getLocks", "outputs": [{"components": [{"name": "token", "type": "address"}, {"name": "amount", "type": "uint256"}, {"name": "start", "type": "uint256"}, {"name": "duration", "type": "uint256"}, {"name": "claimed", "type": "bool"}, {"name": "profit", "type": "uint256"}, {"name": "usingYield", "type": "bool"}, {"name": "yieldEarned", "type": "uint256"}], "name": "", "type": "tuple[]"}], "type": "function"},
-  {"constant": true, "inputs": [{"name": "user", "type": "address"}, {"name": "lockId", "type": "uint256"}], "name": "getLock", "outputs": [{"components": [{"name": "token", "type": "address"}, {"name": "amount", "type": "uint256"}, {"name": "start", "type": "uint256"}, {"name": "duration", "type": "uint256"}, {"name": "claimed", "type": "bool"}, {"name": "profit", "type": "uint256"}, {"name": "usingYield", "type": "bool"}, {"name": "yieldEarned", "type": "uint256"}], "name": "", "type": "tuple"}], "type": "function"},
-  {"constant": true, "inputs": [{"name": "amount", "type": "uint256"}, {"name": "duration", "type": "uint256"}], "name": "calculateProfit", "outputs": [{"name": "", "type": "uint256"}], "type": "function"},
-  {"constant": true, "inputs": [{"name": "user", "type": "address"}, {"name": "lockId", "type": "uint256"}], "name": "getUnlockTime", "outputs": [{"name": "", "type": "uint256"}], "type": "function"},
-  {"constant": true, "inputs": [{"name": "user", "type": "address"}, {"name": "lockId", "type": "uint256"}], "name": "isUnlockable", "outputs": [{"name": "", "type": "bool"}], "type": "function"}
+  /* ...your ABI here... */
 ];
 
-// Initialize clock on page load
-window.addEventListener('DOMContentLoaded', () => {
-  initializeClock();
-  showStatus("✅ System ready. Connect your wallet to begin.", "success");
-});
+function LockerApp() {
+  const account = useActiveAccount();
+  const wallet = useActiveWallet();
+  const chain = useChain();
+  const [tokenAddress, setTokenAddress] = useState("");
+  const [amount, setAmount] = useState("");
+  const [duration, setDuration] = useState("2592000");
+  const [tokenContract, setTokenContract] = useState(null);
+  const [lockerContract, setLockerContract] = useState(null);
+  const [tokenDecimals, setTokenDecimals] = useState(18);
+  const [tokenSymbol, setTokenSymbol] = useState("");
+  const [tokenBalance, setTokenBalance] = useState("");
+  const [ethBalance, setEthBalance] = useState("");
+  const [status, setStatus] = useState("");
+  const [locks, setLocks] = useState([]);
 
-function initializeClock() {
-  // Start immediately
-  updateClock();
-  updateBlockchainTime();
-  
-  // Update clock every second
-  setInterval(updateClock, 1000);
-  
-  // Update blockchain time every 15 seconds
-  setInterval(updateBlockchainTime, 15000);
-}
-
-function updateClock() {
-  const timeEl = document.getElementById('timeDisplay');
-  const dateEl = document.getElementById('dateDisplay');
-  
-  if (!timeEl || !dateEl) {
-    console.log('Clock elements not found, retrying...');
-    return;
-  }
-  
-  const now = new Date();
-  
-  // Format time as HH:MM:SS
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const seconds = String(now.getSeconds()).padStart(2, '0');
-  
-  timeEl.textContent = `${hours}:${minutes}:${seconds}`;
-  
-  // Format date
-  const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-  
-  const dayName = days[now.getDay()];
-  const monthName = months[now.getMonth()];
-  const date = now.getDate();
-  const year = now.getFullYear();
-  
-  dateEl.textContent = `${dayName}, ${monthName} ${date}, ${year}`;
-}
-
-async function updateBlockchainTime() {
-  const blockTimeEl = document.getElementById('blockTime');
-  if (!blockTimeEl) {
-    console.log('Blockchain time element not found');
-    return;
-  }
-  
-  try {
-    // Get current timestamp
-    const timestamp = Math.floor(Date.now() / 1000);
-    
-    // If web3 is available, try to get actual block timestamp
-    if (web3 && wallet) {
-      try {
-        const latestBlock = await web3.eth.getBlock('latest');
-        const blockTimestamp = Number(latestBlock.timestamp);
-        blockTimeEl.textContent = `Block: ${latestBlock.number} | Time: ${blockTimestamp}`;
-        return;
-      } catch (e) {
-        console.log('Could not fetch block data:', e);
-      }
-    }
-    
-    // Fallback to local timestamp
-    blockTimeEl.textContent = `Timestamp: ${timestamp}`;
-  } catch (e) {
-    console.error('Blockchain time error:', e);
-    blockTimeEl.textContent = 'Unable to sync';
-  }
-}
-
-function showStatus(message, type = "info") {
-  const status = document.getElementById("status");
-  status.textContent = message;
-  status.className = "show " + type;
-  setTimeout(() => status.classList.remove("show"), 5000);
-}
-
-function validateAddress(address) {
-  if (!address || !address.match(/^0x[a-fA-F0-9]{40}$/)) {
-    showStatus("❌ Invalid Ethereum address!", "error");
-    return false;
-  }
-  return true;
-}
-
-function validateAmount(amount) {
-  if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-    showStatus("❌ Invalid amount! Enter a positive number.", "error");
-    return false;
-  }
-  return true;
-}
-
-async function checkBalance(tokenAddress) {
-  if (!wallet || !web3) return;
-  try {
-    const tokenContract = new web3.eth.Contract(ERC20_ABI, tokenAddress);
-    const balance = await tokenContract.methods.balanceOf(wallet.address).call();
-    const decimals = await tokenContract.methods.decimals().call();
-    const symbol = await tokenContract.methods.symbol().call();
-    tokenDecimals = decimals;
-    const formatted = (balance / Math.pow(10, decimals)).toFixed(4);
-    document.getElementById('tokenBalance').textContent = `Balance: ${formatted} ${symbol}`;
-  } catch (e) {
-    document.getElementById('tokenBalance').textContent = '';
-  }
-}
-
-async function checkEthBalance() {
-  if (!wallet || !web3) return;
-  try {
-    const balance = await web3.eth.getBalance(wallet.address);
-    const formatted = (balance / 1e18).toFixed(4);
-    document.getElementById('ethBalance').textContent = `ETH Balance: ${formatted} ETH`;
-  } catch (e) {
-    document.getElementById('ethBalance').textContent = '';
-  }
-}
-
-document.getElementById("connectWallet").addEventListener("click", async function() {
-  const btn = this;
-  btn.classList.add("loading");
-  btn.disabled = true;
-  
-  try {
-    showStatus("🔄 Connecting wallet...", "info");
-    
-    // Check if MetaMask is installed
-    if (typeof window.ethereum === 'undefined') {
-      showStatus("❌ MetaMask not found. Please install MetaMask extension.", "error");
-      window.open('https://metamask.io/download/', '_blank');
-      return;
-    }
-    
-    // Request account access
-    let accounts;
-    try {
-      accounts = await window.ethereum.request({ 
-        method: 'eth_requestAccounts' 
-      });
-    } catch (error) {
-      if (error.code === 4001) {
-        showStatus("❌ Connection rejected by user", "error");
-      } else {
-        showStatus("❌ Failed to connect: " + error.message, "error");
-      }
-      return;
-    }
-    
-    if (!accounts || accounts.length === 0) {
-      showStatus("❌ No accounts found. Please unlock MetaMask.", "error");
-      return;
-    }
-    
-    // Get current chain ID
-    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-    
-    // Check if on mainnet (0x1), if not, try to switch
-    if (chainId !== '0x1') {
-      showStatus("🔄 Switching to Ethereum Mainnet...", "info");
-      try {
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x1' }],
-        });
-      } catch (switchError) {
-        if (switchError.code === 4902) {
-          showStatus("⚠ Mainnet not available. Please add Ethereum Mainnet to MetaMask.", "error");
-        } else if (switchError.code === 4001) {
-          showStatus("❌ Network switch rejected by user", "error");
-        } else {
-          showStatus("❌ Failed to switch network: " + switchError.message, "error");
+  // Setup contracts
+  useEffect(() => {
+    if (tokenAddress && account) {
+      getContract({
+        client: wallet?.client,
+        address: tokenAddress,
+        chain: ethereum,
+      }).then(async (contract) => {
+        setTokenContract(contract);
+        try {
+          const decimals = await erc20.decimals({ contract });
+          setTokenDecimals(Number(decimals));
+          const symbol = await erc20.symbol({ contract });
+          setTokenSymbol(symbol);
+        } catch {
+          setTokenDecimals(18);
+          setTokenSymbol("");
         }
-        return;
-      }
-    }
-    
-    // Initialize Web3
-    web3 = new Web3(window.ethereum);
-    
-    // Verify connection by getting chain ID again
-    const finalChainId = await web3.eth.getChainId();
-    if (finalChainId !== 1) {
-      showStatus("⚠ Please switch to Ethereum Mainnet manually", "error");
-      return;
-    }
-    
-    // Create wallet object
-    wallet = { 
-      address: accounts[0], 
-      getAddress: () => accounts[0] 
-    };
-    
-    const address = wallet.getAddress();
-    document.getElementById("walletAddress").innerHTML = `🔐 Connected: <b>${address.slice(0, 6)}...${address.slice(-4)}</b>`;
-    showStatus("✅ Wallet connected successfully on Mainnet!", "success");
-    
-    // Update button text
-    btn.textContent = "🔗 CONNECTED";
-    btn.style.background = "linear-gradient(135deg, #10b981 0%, #059669 100%)";
-    
-    // Listen for account changes
-    window.ethereum.on('accountsChanged', (newAccounts) => {
-      if (newAccounts.length === 0) {
-        // User disconnected
-        wallet = null;
-        web3 = null;
-        document.getElementById("walletAddress").textContent = "";
-        document.getElementById("locks").innerHTML = "Connect wallet to view locks...";
-        btn.textContent = "🔗 CONNECT WALLET";
-        btn.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
-        showStatus("⚠ Wallet disconnected", "error");
-      } else {
-        // Account changed
-        wallet.address = newAccounts[0];
-        document.getElementById("walletAddress").innerHTML = `🔐 Connected: <b>${newAccounts[0].slice(0, 6)}...${newAccounts[0].slice(-4)}</b>`;
-        loadLocks();
-        checkEthBalance();
-      }
-    });
-    
-    // Listen for chain changes
-    window.ethereum.on('chainChanged', (newChainId) => {
-      // Reload page on chain change
-      window.location.reload();
-    });
-    
-    // Load user data
-    await checkEthBalance();
-    await loadLocks();
-    
-  } catch (e) {
-    console.error("Connection error:", e);
-    showStatus("❌ Connection failed: " + (e.message || "Unknown error"), "error");
-  } finally {
-    btn.classList.remove("loading");
-    btn.disabled = false;
-  }
-});
-
-document.getElementById("tokenAddress").addEventListener("blur", function() {
-  const address = this.value.trim();
-  if (address && validateAddress(address)) {
-    checkBalance(address);
-  }
-});
-
-document.getElementById("approveTokens").addEventListener("click", async function() {
-  if (!wallet) {
-    showStatus("⚠ Please connect wallet first!", "error");
-    return;
-  }
-  
-  const btn = this;
-  const token = document.getElementById("tokenAddress").value.trim();
-  const amount = document.getElementById("amount").value.trim();
-  
-  if (!validateAddress(token) || !validateAmount(amount)) return;
-  
-  btn.classList.add("loading");
-  btn.disabled = true;
-  
-  try {
-    showStatus("🔄 Approving tokens...", "info");
-    
-    const amountWei = web3.utils.toBN(amount).mul(web3.utils.toBN(10).pow(web3.utils.toBN(tokenDecimals))).toString();
-    const tokenContract = new web3.eth.Contract(ERC20_ABI, token);
-    const data = tokenContract.methods.approve(contractAddress, amountWei).encodeABI();
-    
-    const txHash = await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [{ from: wallet.address, to: token, data: data }],
-    });
-    
-    showStatus("✅ Tokens approved! TX: " + txHash.slice(0, 10) + "...", "success");
-  } catch (e) {
-    console.error(e);
-    showStatus("❌ Approval failed: " + (e.message || "Unknown error"), "error");
-  } finally {
-    btn.classList.remove("loading");
-    btn.disabled = false;
-  }
-});
-
-document.getElementById("lockTokens").addEventListener("click", async function() {
-  if (!wallet) {
-    showStatus("⚠ Please connect wallet first!", "error");
-    return;
-  }
-  
-  const btn = this;
-  const token = document.getElementById("tokenAddress").value.trim();
-  const amount = document.getElementById("amount").value.trim();
-  const duration = document.getElementById("duration").value;
-  
-  if (!validateAddress(token) || !validateAmount(amount)) return;
-  
-  btn.classList.add("loading");
-  btn.disabled = true;
-  
-  try {
-    showStatus("🔄 Locking tokens...", "info");
-    
-    const amountWei = web3.utils.toBN(amount).mul(web3.utils.toBN(10).pow(web3.utils.toBN(tokenDecimals))).toString();
-    const lockerContract = new web3.eth.Contract(LOCKER_ABI, contractAddress);
-    const data = lockerContract.methods.lock(token, amountWei, duration).encodeABI();
-    
-    const txHash = await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [{ from: wallet.address, to: contractAddress, data: data }],
-    });
-    
-    showStatus("✅ Tokens locked successfully! TX: " + txHash.slice(0, 10) + "...", "success");
-    setTimeout(() => loadLocks(), 3000);
-  } catch (e) {
-    console.error(e);
-    showStatus("❌ Lock failed: " + (e.message || "Unknown error"), "error");
-  } finally {
-    btn.classList.remove("loading");
-    btn.disabled = false;
-  }
-});
-
-// Swap & Lock Function
-document.getElementById("lockWithSwap").addEventListener("click", async function() {
-  if (!wallet) {
-    showStatus("⚠ Please connect wallet first!", "error");
-    return;
-  }
-  
-  const btn = this;
-  const tokenIn = prompt("Enter token to swap FROM (address):");
-  const tokenOut = document.getElementById("tokenAddress").value.trim();
-  const amountIn = prompt("Enter amount to swap:");
-  const duration = document.getElementById("duration").value;
-  
-  if (!validateAddress(tokenIn) || !validateAddress(tokenOut) || !validateAmount(amountIn)) return;
-  
-  btn.classList.add("loading");
-  btn.disabled = true;
-  
-  try {
-    showStatus("🔄 Swapping and locking tokens...", "info");
-    
-    const amountInWei = web3.utils.toBN(amountIn).mul(web3.utils.toBN(10).pow(web3.utils.toBN(18))).toString();
-    const deadline = Math.floor(Date.now() / 1000) + 1200; // 20 min deadline
-    const path = [tokenIn, tokenOut];
-    
-    const lockerContract = new web3.eth.Contract(LOCKER_ABI, contractAddress);
-    const data = lockerContract.methods.swapAndLock(tokenIn, tokenOut, amountInWei, 0, path, duration, deadline).encodeABI();
-    
-    const txHash = await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [{ from: wallet.address, to: contractAddress, data: data }],
-    });
-    
-    showStatus("✅ Swapped & locked! TX: " + txHash.slice(0, 10) + "...", "success");
-    setTimeout(() => loadLocks(), 3000);
-  } catch (e) {
-    console.error(e);
-    showStatus("❌ Swap & lock failed: " + (e.message || "Unknown error"), "error");
-  } finally {
-    btn.classList.remove("loading");
-    btn.disabled = false;
-  }
-});
-
-// Gas-Free Swap & Lock Function
-document.getElementById("gaslessSwap").addEventListener("click", async function() {
-  if (!wallet) {
-    showStatus("⚠ Please connect wallet first!", "error");
-    return;
-  }
-  
-  const btn = this;
-  const tokenIn = prompt("Enter token to swap FROM (address):");
-  const tokenOut = document.getElementById("tokenAddress").value.trim();
-  const amountIn = prompt("Enter amount to swap:");
-  const duration = document.getElementById("duration").value;
-  
-  if (!validateAddress(tokenIn) || !validateAddress(tokenOut) || !validateAmount(amountIn)) return;
-  
-  btn.classList.add("loading");
-  btn.disabled = true;
-  
-  try {
-    showStatus("⚡ Preparing gas-free transaction...", "info");
-    
-    const amountInWei = web3.utils.toBN(amountIn).mul(web3.utils.toBN(10).pow(web3.utils.toBN(18))).toString();
-    const deadline = Math.floor(Date.now() / 1000) + 1200;
-    const path = [tokenIn, tokenOut];
-    const nonce = Date.now();
-    
-    // Create meta-transaction data
-    const lockerContract = new web3.eth.Contract(LOCKER_ABI, contractAddress);
-    const functionData = lockerContract.methods.swapAndLock(tokenIn, tokenOut, amountInWei, 0, path, duration, deadline).encodeABI();
-    
-    // Create EIP-712 signature for gasless transaction
-    const domain = {
-      name: 'CryptoLocker',
-      version: '1',
-      chainId: 1,
-      verifyingContract: contractAddress
-    };
-    
-    const types = {
-      MetaTransaction: [
-        { name: 'nonce', type: 'uint256' },
-        { name: 'from', type: 'address' },
-        { name: 'functionSignature', type: 'bytes' }
-      ]
-    };
-    
-    const message = {
-      nonce: nonce,
-      from: wallet.address,
-      functionSignature: functionData
-    };
-    
-    // Sign the meta-transaction
-    showStatus("⚡ Please sign the gasless transaction...", "info");
-    
-    const signature = await window.ethereum.request({
-      method: 'eth_signTypedData_v4',
-      params: [wallet.address, JSON.stringify({ domain, types, message, primaryType: 'MetaTransaction' })]
-    });
-    
-    // Send to gasless relay service
-    showStatus("⚡ Submitting to gasless relay...", "info");
-    
-    const relayResponse = await fetch('https://api.biconomy.io/api/v2/meta-tx/native', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': 'DEMO_API_KEY' // In production, use your own Biconomy/Gelato API key
-      },
-      body: JSON.stringify({
-        to: contractAddress,
-        apiId: 'gasless-swap',
-        params: [wallet.address, functionData, signature],
-        from: wallet.address,
-        signatureType: 'EIP712_SIGN'
-      })
-    });
-    
-    if (!relayResponse.ok) {
-      // Fallback: Use regular transaction if gasless fails
-      showStatus("⚠ Gasless relay unavailable, using regular transaction...", "info");
-      
-      const txHash = await window.ethereum.request({
-        method: 'eth_sendTransaction',
-        params: [{ from: wallet.address, to: contractAddress, data: functionData }],
       });
-      
-      showStatus("✅ Transaction sent! TX: " + txHash.slice(0, 10) + "...", "success");
-      setTimeout(() => loadLocks(), 3000);
-    } else {
-      const result = await relayResponse.json();
-      showStatus("✅ Gas-free swap submitted! TX: " + (result.txHash || 'pending').slice(0, 10) + "...", "success");
-      setTimeout(() => loadLocks(), 5000);
     }
-  } catch (e) {
-    console.error(e);
-    
-    // Ultimate fallback: simple swap
-    if (confirm("Gas-free swap unavailable. Use regular swap with gas?")) {
-      try {
-        const amountInWei = web3.utils.toBN(amountIn).mul(web3.utils.toBN(10).pow(web3.utils.toBN(18))).toString();
-        const deadline = Math.floor(Date.now() / 1000) + 1200;
-        const path = [tokenIn, tokenOut];
-        const duration = document.getElementById("duration").value;
-        
-        const lockerContract = new web3.eth.Contract(LOCKER_ABI, contractAddress);
-        const data = lockerContract.methods.swapAndLock(tokenIn, tokenOut, amountInWei, 0, path, duration, deadline).encodeABI();
-        
-        const txHash = await window.ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [{ from: wallet.address, to: contractAddress, data: data }],
-        });
-        
-        showStatus("✅ Swapped & locked! TX: " + txHash.slice(0, 10) + "...", "success");
-        setTimeout(() => loadLocks(), 3000);
-      } catch (fallbackError) {
-        showStatus("❌ Swap failed: " + (fallbackError.message || "Unknown error"), "error");
+  }, [tokenAddress, account, wallet]);
+
+  useEffect(() => {
+    if (account) {
+      getContract({
+        client: wallet?.client,
+        address: LOCKER_CONTRACT,
+        chain: ethereum,
+        abi: LOCKER_ABI,
+      }).then(setLockerContract);
+    }
+  }, [account, wallet]);
+
+  // Fetch balances
+  useEffect(() => {
+    async function fetchBalances() {
+      if (account && tokenContract) {
+        try {
+          const bal = await erc20.balanceOf({
+            contract: tokenContract,
+            address: account.address,
+          });
+          setTokenBalance(
+            (Number(bal) / 10 ** tokenDecimals).toFixed(4) + " " + tokenSymbol,
+          );
+        } catch {
+          setTokenBalance("");
+        }
       }
-    } else {
-      showStatus("❌ Gas-free swap cancelled", "error");
+      if (account && wallet) {
+        try {
+          const bal = await wallet.getBalance();
+          setEthBalance((Number(bal) / 1e18).toFixed(4) + " ETH");
+        } catch {
+          setEthBalance("");
+        }
+      }
     }
-  } finally {
-    btn.classList.remove("loading");
-    btn.disabled = false;
-  }
-});
+    fetchBalances();
+  }, [account, tokenContract, tokenDecimals, tokenSymbol, wallet]);
 
-// Lock with Yield Function
-document.getElementById("lockWithYield").addEventListener("click", async function() {
-  if (!wallet) {
-    showStatus("⚠ Please connect wallet first!", "error");
-    return;
-  }
-  
-  const btn = this;
-  const token = document.getElementById("tokenAddress").value.trim();
-  const amount = document.getElementById("amount").value.trim();
-  const duration = document.getElementById("duration").value;
-  
-  if (!validateAddress(token) || !validateAmount(amount)) return;
-  
-  btn.classList.add("loading");
-  btn.disabled = true;
-  
-  try {
-    showStatus("🔄 Locking tokens with yield generation...", "info");
-    
-    const amountWei = web3.utils.toBN(amount).mul(web3.utils.toBN(10).pow(web3.utils.toBN(tokenDecimals))).toString();
-    const lockerContract = new web3.eth.Contract(LOCKER_ABI, contractAddress);
-    const data = lockerContract.methods.lockWithYield(token, amountWei, duration).encodeABI();
-    
-    const txHash = await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [{ from: wallet.address, to: contractAddress, data: data }],
-    });
-    
-    showStatus("✅ Locked with yield generation! TX: " + txHash.slice(0, 10) + "...", "success");
-    setTimeout(() => loadLocks(), 3000);
-  } catch (e) {
-    console.error(e);
-    showStatus("❌ Yield lock failed: " + (e.message || "Unknown error"), "error");
-  } finally {
-    btn.classList.remove("loading");
-    btn.disabled = false;
-  }
-});
+  // Fetch locks
+  useEffect(() => {
+    async function fetchLocks() {
+      if (lockerContract && account) {
+        try {
+          const locks = await lockerContract.read.getLocks([account.address]);
+          setLocks(locks);
+        } catch {
+          setLocks([]);
+        }
+      }
+    }
+    fetchLocks();
+  }, [lockerContract, account]);
 
-// Lock LP Tokens Function
-document.getElementById("lockLPTokens").addEventListener("click", async function() {
-  if (!wallet) {
-    showStatus("⚠ Please connect wallet first!", "error");
-    return;
-  }
-  
-  const btn = this;
-  const lpToken = prompt("Enter LP token contract address:");
-  const amount = prompt("Enter LP token amount:");
-  const duration = document.getElementById("duration").value;
-  
-  if (!validateAddress(lpToken) || !validateAmount(amount)) return;
-  
-  btn.classList.add("loading");
-  btn.disabled = true;
-  
-  try {
-    showStatus("🔄 Locking LP tokens (1.5x profit)...", "info");
-    
-    const amountWei = web3.utils.toBN(amount).mul(web3.utils.toBN(10).pow(web3.utils.toBN(18))).toString();
-    const lockerContract = new web3.eth.Contract(LOCKER_ABI, contractAddress);
-    const data = lockerContract.methods.lockLPTokens(lpToken, amountWei, duration).encodeABI();
-    
-    const txHash = await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [{ from: wallet.address, to: contractAddress, data: data }],
-    });
-    
-    showStatus("✅ LP tokens locked with 1.5x profit! TX: " + txHash.slice(0, 10) + "...", "success");
-    setTimeout(() => loadLocks(), 3000);
-  } catch (e) {
-    console.error(e);
-    showStatus("❌ LP lock failed: " + (e.message || "Unknown error"), "error");
-  } finally {
-    btn.classList.remove("loading");
-    btn.disabled = false;
-  }
-});
+  // Approve tokens
+  const approveTx = tokenContract
+    ? () =>
+        erc20.approve({
+          contract: tokenContract,
+          spender: LOCKER_CONTRACT,
+          amount: BigInt(Number(amount) * 10 ** tokenDecimals),
+        })
+    : undefined;
 
-async function unlockLock(lockId) {
-  if (!wallet) return;
-  
-  try {
-    showStatus("🔄 Unlocking tokens...", "info");
-    
-    const lockerContract = new web3.eth.Contract(LOCKER_ABI, contractAddress);
-    const data = lockerContract.methods.unlock(lockId).encodeABI();
-    
-    const txHash = await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [{ from: wallet.address, to: contractAddress, data: data }],
-    });
-    
-    showStatus("✅ Tokens unlocked! TX: " + txHash.slice(0, 10) + "...", "success");
-    setTimeout(() => loadLocks(), 3000);
-  } catch (e) {
-    console.error(e);
-    showStatus("❌ Unlock failed: " + (e.message || "Unknown error"), "error");
-  }
+  // Lock tokens
+  const lockTokensTx =
+    lockerContract && tokenContract
+      ? () =>
+          lockerContract.write.lock([
+            tokenAddress,
+            BigInt(Number(amount) * 10 ** tokenDecimals),
+            BigInt(duration),
+          ])
+      : undefined;
+
+  return (
+    <div
+      style={{
+        maxWidth: 600,
+        margin: "40px auto",
+        background: "#111",
+        borderRadius: 24,
+        padding: 32,
+        color: "#fff",
+      }}
+    >
+      <h2>
+        ⬢ CRYPTOLOCKER{" "}
+        <span
+          style={{
+            background: "#10b981",
+            color: "#fff",
+            borderRadius: 8,
+            padding: "4px 12px",
+            marginLeft: 8,
+          }}
+        >
+          MAINNET
+        </span>
+      </h2>
+      <div style={{ margin: "24px 0" }}>
+        <ConnectButton />
+        {account && (
+          <div style={{ marginTop: 12 }}>
+            🔐 Connected:{" "}
+            <b>
+              {account.address.slice(0, 6)}...{account.address.slice(-4)}
+            </b>
+          </div>
+        )}
+      </div>
+      <input
+        placeholder="Token Contract Address (0x...)"
+        value={tokenAddress}
+        onChange={(e) => setTokenAddress(e.target.value)}
+        style={{
+          width: "100%",
+          marginBottom: 12,
+          padding: 12,
+          borderRadius: 8,
+          border: "1px solid #333",
+          background: "#1a1a1a",
+          color: "#fff",
+        }}
+      />
+      <div style={{ fontSize: 13, color: "#999", marginBottom: 8 }}>
+        {tokenBalance}
+      </div>
+      <input
+        placeholder="Amount (e.g., 1)"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+        style={{
+          width: "100%",
+          marginBottom: 12,
+          padding: 12,
+          borderRadius: 8,
+          border: "1px solid #333",
+          background: "#1a1a1a",
+          color: "#fff",
+        }}
+      />
+      <div style={{ fontSize: 13, color: "#999", marginBottom: 8 }}>
+        {ethBalance}
+      </div>
+      <select
+        value={duration}
+        onChange={(e) => setDuration(e.target.value)}
+        style={{
+          width: "100%",
+          marginBottom: 18,
+          padding: 12,
+          borderRadius: 8,
+          border: "1px solid #333",
+          background: "#1a1a1a",
+          color: "#fff",
+        }}
+      >
+        <option value="2592000">⏱ 30 Days (Minimum)</option>
+        <option value="7776000">⏱ 90 Days</option>
+        <option value="15552000">⏱ 180 Days</option>
+        <option value="31536000">⏱ 1 Year</option>
+      </select>
+      <h3>🔒 Locking Options</h3>
+      <TransactionButton
+        transaction={approveTx}
+        onTransactionConfirmed={() => setStatus("✅ Tokens approved!")}
+        style={{ marginBottom: 12 }}
+      >
+        ✅ Approve Tokens
+      </TransactionButton>
+      <TransactionButton
+        transaction={lockTokensTx}
+        onTransactionConfirmed={() => setStatus("✅ Tokens locked!")}
+        style={{ marginBottom: 12 }}
+      >
+        🔒 Lock Tokens
+      </TransactionButton>
+      {status && (
+        <div style={{ margin: "12px 0", color: "#10b981" }}>{status}</div>
+      )}
+      <h3>📋 Your Locks</h3>
+      <div
+        style={{
+          background: "#1a1a1a",
+          borderRadius: 12,
+          padding: 16,
+          minHeight: 60,
+        }}
+      >
+        {locks && locks.length > 0
+          ? locks.map((lock, i) => (
+              <div key={i} style={{ marginBottom: 12 }}>
+                <b>Token:</b> {lock.token} <br />
+                <b>Amount:</b>{" "}
+                {(Number(lock.amount) / 10 ** tokenDecimals).toFixed(4)}{" "}
+                {tokenSymbol} <br />
+                <b>Start:</b>{" "}
+                {new Date(Number(lock.start) * 1000).toLocaleString()} <br />
+                <b>Duration:</b> {Number(lock.duration) / 86400} days <br />
+                <b>Status:</b> {lock.claimed ? "Unlocked" : "Locked"}
+              </div>
+            ))
+          : "No locks found."}
+      </div>
+    </div>
+  );
 }
 
-async function emergencyUnlock(lockId) {
-  if (!wallet) {
-    showStatus("⚠ Connect wallet first!", "error");
-    return;
-  }
-  
-  if (!confirm("⚠️ Emergency unlock has a 10% penalty. Continue?")) return;
-  
-  try {
-    showStatus("🔄 Emergency unlocking (10% penalty)...", "info");
-    
-    const lockerContract = new web3.eth.Contract(LOCKER_ABI, contractAddress);
-    const data = lockerContract.methods.emergencyUnlock(lockId).encodeABI();
-    
-    const txHash = await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [{ from: wallet.address, to: contractAddress, data: data }],
-    });
-    
-    showStatus("✅ Emergency unlock complete! 10% penalty applied. TX: " + txHash.slice(0, 10) + "...", "success");
-    setTimeout(() => loadLocks(), 3000);
-  } catch (e) {
-    console.error(e);
-    showStatus("❌ Emergency unlock failed: " + (e.message || "Unknown error"), "error");
-  }
-}
-
-async function claimYield(lockId) {
-  if (!wallet) {
-    showStatus("⚠ Connect wallet first!", "error");
-    return;
-  }
-  
-  try {
-    showStatus("🔄 Claiming yield...", "info");
-    
-    const lockerContract = new web3.eth.Contract(LOCKER_ABI, contractAddress);
-    const data = lockerContract.methods.claimYield(lockId).encodeABI();
-    
-    const txHash = await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [{ from: wallet.address, to: contractAddress, data: data }],
-    });
-    
-    showStatus("✅ Yield claimed successfully! TX: " + txHash.slice(0, 10) + "...", "success");
-    setTimeout(() => loadLocks(), 3000);
-  } catch (e) {
-    console.error(e);
-    showStatus("❌ Claim failed: " + (e.message || "Unknown error"), "error");
-  }
+// Wrap with provider
+export default function App() {
+  return (
+    <ThirdwebProvider clientId="YOUR_CLIENT_ID" supportedChains={[ethereum]}>
+      <LockerApp />
+    </ThirdwebProvider>
+  );
 }

@@ -762,38 +762,114 @@ document.getElementById("connectWallet").addEventListener("click", async functio
   btn.disabled = true;
   
   try {
-    showStatus("🔄 Connecting to MetaMask...", "info");
+    showStatus("🔄 Connecting wallet...", "info");
     
+    // Check if MetaMask is installed
     if (typeof window.ethereum === 'undefined') {
-      throw new Error("MetaMask is not installed. Please install MetaMask.");
+      showStatus("❌ MetaMask not found. Please install MetaMask extension.", "error");
+      window.open('https://metamask.io/download/', '_blank');
+      return;
     }
     
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    
+    // Request account access
+    let accounts;
     try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x1' }],
+      accounts = await window.ethereum.request({ 
+        method: 'eth_requestAccounts' 
       });
-    } catch (switchError) {
-      if (switchError.code === 4902) {
-        showStatus("⚠ Please switch to Ethereum Mainnet in MetaMask", "error");
+    } catch (error) {
+      if (error.code === 4001) {
+        showStatus("❌ Connection rejected by user", "error");
+      } else {
+        showStatus("❌ Failed to connect: " + error.message, "error");
+      }
+      return;
+    }
+    
+    if (!accounts || accounts.length === 0) {
+      showStatus("❌ No accounts found. Please unlock MetaMask.", "error");
+      return;
+    }
+    
+    // Get current chain ID
+    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+    
+    // Check if on mainnet (0x1), if not, try to switch
+    if (chainId !== '0x1') {
+      showStatus("🔄 Switching to Ethereum Mainnet...", "info");
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x1' }],
+        });
+      } catch (switchError) {
+        if (switchError.code === 4902) {
+          showStatus("⚠ Mainnet not available. Please add Ethereum Mainnet to MetaMask.", "error");
+        } else if (switchError.code === 4001) {
+          showStatus("❌ Network switch rejected by user", "error");
+        } else {
+          showStatus("❌ Failed to switch network: " + switchError.message, "error");
+        }
         return;
       }
-      throw switchError;
     }
     
+    // Initialize Web3
     web3 = new Web3(window.ethereum);
-    wallet = { address: accounts[0], getAddress: () => accounts[0] };
+    
+    // Verify connection by getting chain ID again
+    const finalChainId = await web3.eth.getChainId();
+    if (finalChainId !== 1) {
+      showStatus("⚠ Please switch to Ethereum Mainnet manually", "error");
+      return;
+    }
+    
+    // Create wallet object
+    wallet = { 
+      address: accounts[0], 
+      getAddress: () => accounts[0] 
+    };
     
     const address = wallet.getAddress();
-    document.getElementById("walletAddress").textContent = `🔐 Connected: ${address.slice(0, 6)}...${address.slice(-4)}`;
-    showStatus("✅ Wallet connected successfully!", "success");
+    document.getElementById("walletAddress").innerHTML = `🔐 Connected: <b>${address.slice(0, 6)}...${address.slice(-4)}</b>`;
+    showStatus("✅ Wallet connected successfully on Mainnet!", "success");
     
-    checkEthBalance();
+    // Update button text
+    btn.textContent = "🔗 CONNECTED";
+    btn.style.background = "linear-gradient(135deg, #10b981 0%, #059669 100%)";
+    
+    // Listen for account changes
+    window.ethereum.on('accountsChanged', (newAccounts) => {
+      if (newAccounts.length === 0) {
+        // User disconnected
+        wallet = null;
+        web3 = null;
+        document.getElementById("walletAddress").textContent = "";
+        document.getElementById("locks").innerHTML = "Connect wallet to view locks...";
+        btn.textContent = "🔗 CONNECT WALLET";
+        btn.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+        showStatus("⚠ Wallet disconnected", "error");
+      } else {
+        // Account changed
+        wallet.address = newAccounts[0];
+        document.getElementById("walletAddress").innerHTML = `🔐 Connected: <b>${newAccounts[0].slice(0, 6)}...${newAccounts[0].slice(-4)}</b>`;
+        loadLocks();
+        checkEthBalance();
+      }
+    });
+    
+    // Listen for chain changes
+    window.ethereum.on('chainChanged', (newChainId) => {
+      // Reload page on chain change
+      window.location.reload();
+    });
+    
+    // Load user data
+    await checkEthBalance();
     await loadLocks();
+    
   } catch (e) {
-    console.error(e);
+    console.error("Connection error:", e);
     showStatus("❌ Connection failed: " + (e.message || "Unknown error"), "error");
   } finally {
     btn.classList.remove("loading");

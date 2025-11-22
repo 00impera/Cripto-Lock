@@ -3,26 +3,20 @@ import {
   ThirdwebProvider,
   ConnectButton,
   useActiveAccount,
-  useActiveWallet,
-  useChain,
-  useReadContract,
-  useSendTransaction,
   TransactionButton,
 } from "thirdweb/react";
 import { getContract } from "thirdweb";
 import { erc20 } from "thirdweb/extensions";
 import { ethereum } from "thirdweb/chains";
 
-// Replace with your actual contract addresses
-const LOCKER_CONTRACT = "0x82ecB5c11Eda49f8E77e8617C360A5645F8612D1";
+// Your ABI here (paste the full array)
 const LOCKER_ABI = [
-  /* ...your ABI here... */
+  // ...PASTE YOUR ABI HERE...
 ];
+const LOCKER_ADDRESS = "0x82ecB5c11Eda49f8E77e8617C360A5645F8612D1";
 
 function LockerApp() {
   const account = useActiveAccount();
-  const wallet = useActiveWallet();
-  const chain = useChain();
   const [tokenAddress, setTokenAddress] = useState("");
   const [amount, setAmount] = useState("");
   const [duration, setDuration] = useState("2592000");
@@ -31,15 +25,14 @@ function LockerApp() {
   const [tokenDecimals, setTokenDecimals] = useState(18);
   const [tokenSymbol, setTokenSymbol] = useState("");
   const [tokenBalance, setTokenBalance] = useState("");
-  const [ethBalance, setEthBalance] = useState("");
   const [status, setStatus] = useState("");
-  const [locks, setLocks] = useState([]);
+  const [profitRate, setProfitRate] = useState(null);
 
   // Setup contracts
   useEffect(() => {
     if (tokenAddress && account) {
       getContract({
-        client: wallet?.client,
+        client: account.client,
         address: tokenAddress,
         chain: ethereum,
       }).then(async (contract) => {
@@ -55,18 +48,26 @@ function LockerApp() {
         }
       });
     }
-  }, [tokenAddress, account, wallet]);
+  }, [tokenAddress, account]);
 
   useEffect(() => {
     if (account) {
       getContract({
-        client: wallet?.client,
-        address: LOCKER_CONTRACT,
+        client: account.client,
+        address: LOCKER_ADDRESS,
         chain: ethereum,
         abi: LOCKER_ABI,
-      }).then(setLockerContract);
+      }).then(async (contract) => {
+        setLockerContract(contract);
+        try {
+          const rate = await contract.read.profitRate();
+          setProfitRate(rate.toString());
+        } catch {
+          setProfitRate(null);
+        }
+      });
     }
-  }, [account, wallet]);
+  }, [account]);
 
   // Fetch balances
   useEffect(() => {
@@ -84,39 +85,16 @@ function LockerApp() {
           setTokenBalance("");
         }
       }
-      if (account && wallet) {
-        try {
-          const bal = await wallet.getBalance();
-          setEthBalance((Number(bal) / 1e18).toFixed(4) + " ETH");
-        } catch {
-          setEthBalance("");
-        }
-      }
     }
     fetchBalances();
-  }, [account, tokenContract, tokenDecimals, tokenSymbol, wallet]);
-
-  // Fetch locks
-  useEffect(() => {
-    async function fetchLocks() {
-      if (lockerContract && account) {
-        try {
-          const locks = await lockerContract.read.getLocks([account.address]);
-          setLocks(locks);
-        } catch {
-          setLocks([]);
-        }
-      }
-    }
-    fetchLocks();
-  }, [lockerContract, account]);
+  }, [account, tokenContract, tokenDecimals, tokenSymbol]);
 
   // Approve tokens
   const approveTx = tokenContract
     ? () =>
         erc20.approve({
           contract: tokenContract,
-          spender: LOCKER_CONTRACT,
+          spender: LOCKER_ADDRESS,
           amount: BigInt(Number(amount) * 10 ** tokenDecimals),
         })
     : undefined;
@@ -135,7 +113,7 @@ function LockerApp() {
   return (
     <div
       style={{
-        maxWidth: 600,
+        maxWidth: 500,
         margin: "40px auto",
         background: "#111",
         borderRadius: 24,
@@ -199,9 +177,6 @@ function LockerApp() {
           color: "#fff",
         }}
       />
-      <div style={{ fontSize: 13, color: "#999", marginBottom: 8 }}>
-        {ethBalance}
-      </div>
       <select
         value={duration}
         onChange={(e) => setDuration(e.target.value)}
@@ -220,10 +195,15 @@ function LockerApp() {
         <option value="15552000">⏱ 180 Days</option>
         <option value="31536000">⏱ 1 Year</option>
       </select>
-      <h3>🔒 Locking Options</h3>
+      <div style={{ marginBottom: 12 }}>
+        {profitRate && (
+          <span style={{ color: "#10b981" }}>Profit Rate: {profitRate}</span>
+        )}
+      </div>
       <TransactionButton
         transaction={approveTx}
         onTransactionConfirmed={() => setStatus("✅ Tokens approved!")}
+        onError={(err) => setStatus("❌ " + err.message)}
         style={{ marginBottom: 12 }}
       >
         ✅ Approve Tokens
@@ -231,45 +211,31 @@ function LockerApp() {
       <TransactionButton
         transaction={lockTokensTx}
         onTransactionConfirmed={() => setStatus("✅ Tokens locked!")}
+        onError={(err) => setStatus("❌ " + err.message)}
         style={{ marginBottom: 12 }}
       >
         🔒 Lock Tokens
       </TransactionButton>
       {status && (
-        <div style={{ margin: "12px 0", color: "#10b981" }}>{status}</div>
+        <div
+          style={{
+            margin: "12px 0",
+            color: status.startsWith("✅") ? "#10b981" : "#ef4444",
+          }}
+        >
+          {status}
+        </div>
       )}
-      <h3>📋 Your Locks</h3>
-      <div
-        style={{
-          background: "#1a1a1a",
-          borderRadius: 12,
-          padding: 16,
-          minHeight: 60,
-        }}
-      >
-        {locks && locks.length > 0
-          ? locks.map((lock, i) => (
-              <div key={i} style={{ marginBottom: 12 }}>
-                <b>Token:</b> {lock.token} <br />
-                <b>Amount:</b>{" "}
-                {(Number(lock.amount) / 10 ** tokenDecimals).toFixed(4)}{" "}
-                {tokenSymbol} <br />
-                <b>Start:</b>{" "}
-                {new Date(Number(lock.start) * 1000).toLocaleString()} <br />
-                <b>Duration:</b> {Number(lock.duration) / 86400} days <br />
-                <b>Status:</b> {lock.claimed ? "Unlocked" : "Locked"}
-              </div>
-            ))
-          : "No locks found."}
-      </div>
     </div>
   );
 }
 
-// Wrap with provider
 export default function App() {
   return (
-    <ThirdwebProvider clientId="YOUR_CLIENT_ID" supportedChains={[ethereum]}>
+    <ThirdwebProvider
+      clientId="10f433657d1018e7003e5cd1cb9c61d7"
+      supportedChains={[ethereum]}
+    >
       <LockerApp />
     </ThirdwebProvider>
   );
